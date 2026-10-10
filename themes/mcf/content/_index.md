@@ -42,7 +42,6 @@ home:
   stats:
     exclude_role_prefixes:
     - alumni
-    # TODO(MCF): should former postdocs (role `post-postdoc`) also be excluded?
     items:
     - metric: publications
       label: Publications
