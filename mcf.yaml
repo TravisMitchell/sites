@@ -14,7 +14,6 @@ outputs:
 
 title: "Modelling Complex Fluids Group"
 description: 'The Modelling Complex Fluids (MCF) group at The University of Queensland develops advanced computational methods for multiphase, non-Newtonian and particle-laden flows in the energy and resources sector.'
-dateFormat: 2 January 2006
 menus:
   main:
     - name: Research
@@ -46,6 +45,7 @@ markup:
     endLevel: 3
 
 params:
+  dateFormat: 2 January 2006
   author:
     name: 'Modelling Complex Fluids Group, The University of Queensland'
   recentProp: "Params.mcf"
