@@ -1,0 +1,18 @@
+{{- /*
+  Full People directory page (title, intro, grouped cards).
+  Used by the people term page of the site taxonomy (/mcf/people/, /za/people/)
+  and by the /people/ section page, so both show the same thing.
+  Intro text: the page's own content, else the content of the
+  /<sitesme>/people term page.
+*/ -}}
+{{- $intro := .Content -}}
+{{- if not $intro -}}
+{{-   with site.GetPage (printf "/%s/people" site.Params.sitesme) -}}{{ $intro = .Content }}{{ end -}}
+{{- end -}}
+<header class="mcf-people__header">
+  <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">{{ .Title | default "People" }}</h1>
+  {{- with $intro }}
+  <div class="mcf-people__intro prose dark:prose-invert">{{ . }}</div>
+  {{- end }}
+</header>
+{{ partial "people/directory.html" . }}

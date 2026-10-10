@@ -5,13 +5,22 @@ tclb:
 - people
 - user
 - contr
-mcf: people
+position: Postdoctoral Researcher
+mcf:
+- people
+- postdoc
 scopus: '57215219080'
 orcid: 0000-0002-1302-4859
-feature: thumbnail.jpeg
+feature: thumbnail.jpg
+interests:
+- Particle suspensions
+- Lattice Boltzmann and discrete element methods
+- Subsurface flow in fractured and porous media
+- Proppant transport
+- Non-Newtonian and physicochemical effects
 ---
 
-Dr. Nathan Di Vaira is a post-doctoral researcher within the School of Mechanical and Mining Engineering at the Univeristy of Queensland (UQ). He holds a PhD in mechanical engineering from UQ, as well as a Bachelor of Engineering (Honours). Nathan has prior experience in the resources sector working for BHP and has gained exposure to electricity market modelling via a PhD industry placement with Ernst & Young.
+Dr. Nathan Di Vaira is a post-doctoral researcher within the School of Mechanical and Mining Engineering at the University of Queensland (UQ). He holds a PhD in mechanical engineering from UQ, as well as a Bachelor of Engineering (Honours). Nathan has prior experience in the resources sector working for BHP and has gained exposure to electricity market modelling via a PhD industry placement with Ernst & Young.
 
 **Research**
 

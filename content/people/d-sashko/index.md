@@ -1,8 +1,6 @@
 ---
 short: D Sashko
 title: D Sashko
-auto_content: yes                                  # DELETE THIS TO NOT AUTO GENERATE CONTENT
-auto_data: yes                                     # DELETE THIS TO NOT AUTO GENERATE METADATA
 tclb:
 - people
 - user
@@ -12,6 +10,13 @@ mcf:
 - phd
 scopus: '57305346800'
 orcid: 0000-0002-3154-1083
+interests:
+- Phase-field lattice Boltzmann methods
+- Wetting and droplet dynamics
+- Fracture flow
+- Multiphysics coupling
 ---
+
+<!-- TODO(MCF): full name, photo (thumbnail.jpg in this folder), short bio, email/links; interests above were derived from publication titles/keywords - please confirm -->
 
 {{< publist >}}

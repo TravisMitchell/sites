@@ -1,0 +1,82 @@
+{{- /*
+  People directory: all people pages that belong to the current site
+  (front matter key == site.Params.sitesme, containing "people"), grouped by
+  role as configured in data/people_roles.yaml. No pagination.
+  Context: the list/term page being rendered.
+*/ -}}
+{{- $key := site.Params.sitesme -}}
+{{- $cfg := index site.Data.people_roles $key | default dict -}}
+{{- $groups := $cfg.groups | default slice -}}
+
+{{- /* global role order, used to sort people inside a section */ -}}
+{{- $order := slice -}}
+{{- range $groups }}{{ range .roles }}{{ $order = $order | append . }}{{ end }}{{ end -}}
+
+{{- $members := slice -}}
+{{- range where site.RegularPages "Section" "people" -}}
+{{-   $r := partial "people/role.html" . -}}
+{{-   if $r.member -}}
+{{-     $ri := len $order -}}
+{{-     range $i, $o := $order }}{{ if eq $o $r.role }}{{ $ri = $i }}{{ end }}{{ end -}}
+{{-     $short := .Params.short | default .Title | string -}}
+{{-     $parts := split $short " " -}}
+{{-     $surname := lower (cond (gt (len $parts) 1) (delimit (after 1 $parts) " ") $short) -}}
+{{-     $sort := printf "%03d-%05d-%s-%s" $ri (add .Weight 10000) $surname (lower $short) -}}
+{{-     $members = $members | append (dict "page" . "role" $r.role "label" $r.label "sort" $sort) -}}
+{{-   end -}}
+{{- end -}}
+{{- $members = sort $members "sort" -}}
+
+{{- /* sections */ -}}
+{{- $sections := slice -}}
+{{- range $i, $g := $groups -}}
+{{-   $in := slice -}}
+{{-   range $members }}{{ if in $g.roles .role }}{{ $in = $in | append . }}{{ end }}{{ end -}}
+{{-   with $in -}}
+{{-     $sections = $sections | append (dict "title" $g.title "id" (anchorize $g.title) "roles" $g.roles "members" .) -}}
+{{-   end -}}
+{{- end -}}
+{{- $rest := slice -}}
+{{- range $members }}{{ if not (in $order .role) }}{{ $rest = $rest | append . }}{{ end }}{{ end -}}
+{{- with $rest -}}
+{{-   $t := $cfg.other | default "Members" -}}
+{{-   $sections = $sections | append (dict "title" $t "id" (anchorize $t) "roles" slice "members" .) -}}
+{{- end -}}
+
+<div class="mcf-people">
+  {{- if gt (len $sections) 1 }}
+  <nav class="mcf-people__nav" aria-label="People sections">
+    <ul>
+      {{- range $sections }}
+      <li><a href="#{{ .id }}">{{ .title }} <span class="mcf-people__count">{{ len .members }}</span></a></li>
+      {{- end }}
+    </ul>
+  </nav>
+  {{- end }}
+
+  {{- range $sections }}
+  {{- $s := . }}
+  <section class="mcf-people__section" id="{{ .id }}" aria-labelledby="{{ .id }}-title">
+    <h2 class="mcf-people__heading" id="{{ .id }}-title">{{ .title }}</h2>
+    {{- /* sub-headings when a section mixes several roles (e.g. alumni) */ -}}
+    {{- $present := slice -}}
+    {{- range .members }}{{ $present = $present | append .role }}{{ end -}}
+    {{- $present = uniq $present -}}
+    {{- if gt (len $present) 1 }}
+      {{- range $role := $s.roles }}
+        {{- $sub := where $s.members "role" $role }}
+        {{- with $sub }}
+        <h3 class="mcf-people__subheading">{{ index ($cfg.plurals | default dict) $role | default (index ($cfg.labels | default dict) $role) | default $role }}</h3>
+        <div class="mcf-people__grid">
+          {{- range . }}{{ partial "people/card.html" (dict "page" .page "label" "" "level" 4) }}{{ end }}
+        </div>
+        {{- end }}
+      {{- end }}
+    {{- else }}
+    <div class="mcf-people__grid">
+      {{- range .members }}{{ partial "people/card.html" (dict "page" .page "label" .label) }}{{ end }}
+    </div>
+    {{- end }}
+  </section>
+  {{- end }}
+</div>

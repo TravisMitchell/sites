@@ -1,0 +1,32 @@
+{{- /*
+  Photo of a person, or an initials placeholder when there is no photo.
+  Params: page (people page), size ("md" for cards, "lg" for profiles).
+  Photo = page-bundle image named by `feature:` (or *feature*), else *thumb*.
+*/ -}}
+{{- $p := .page -}}
+{{- $size := .size | default "md" -}}
+{{- $px := cond (eq $size "lg") 360 240 -}}
+{{- $images := $p.Resources.ByType "image" -}}
+{{- $img := $images.GetMatch ($p.Params.feature | default "*feature*") -}}
+{{- if not $img -}}{{ $img = $images.GetMatch ($p.Params.thumbnail | default "*thumb*") }}{{ end -}}
+{{- if $img -}}
+{{-   $src := $img -}}
+{{-   if ne $img.MediaType.SubType "svg" -}}
+{{-     $s := math.Min $img.Width $img.Height $px | int -}}
+{{-     $src = $img.Fill (printf "%dx%d smart q85" $s $s) -}}
+{{-   end -}}
+<img class="mcf-avatar mcf-avatar--{{ $size }}" src="{{ $src.RelPermalink }}"
+  {{- if ne $img.MediaType.SubType "svg" }} width="{{ $src.Width }}" height="{{ $src.Height }}"{{ end }}
+  alt="{{ $p.Title }}" {{ if ne $size "lg" }}loading="lazy" decoding="async"{{ end }} />
+{{- else -}}
+{{-   $name := replaceRE `\s+` " " (trim (replaceRE `[^\p{L}\s-]` " " $p.Title) " ") -}}
+{{-   $words := cond (eq $name "") slice (split $name " ") -}}
+{{-   $initials := "" -}}
+{{-   with $words -}}
+{{-     $initials = substr (index . 0) 0 1 -}}
+{{-     if gt (len .) 1 -}}{{ $initials = print $initials (substr (index . (sub (len .) 1)) 0 1) }}{{ end -}}
+{{-   end -}}
+<span class="mcf-avatar mcf-avatar--{{ $size }} mcf-avatar--initials" role="img" aria-label="{{ $p.Title }} (no photo)">
+  <span aria-hidden="true">{{ upper $initials }}</span>
+</span>
+{{- end -}}

@@ -1,0 +1,22 @@
+{{- /*
+  Role of a person on the current site.
+  Context: a people page. Returns a dict:
+    member  bool    listed in this site's people (site list contains "people")
+    role    string  second entry of the site list (e.g. "phd"), "" if none
+    label   string  display label from data/people_roles.yaml, "" if none
+    alumni  bool    role starts with "alumni"
+*/ -}}
+{{- $key := site.Params.sitesme -}}
+{{- $v := index .Params $key -}}
+{{- $member := false -}}
+{{- $role := "" -}}
+{{- if reflect.IsSlice $v -}}
+{{-   $member = in $v "people" -}}
+{{-   if gt (len $v) 1 -}}{{ $role = index $v 1 | string }}{{ end -}}
+{{- else if $v -}}
+{{-   $member = eq (string $v) "people" -}}
+{{- end -}}
+{{- $cfg := index site.Data.people_roles $key | default dict -}}
+{{- $label := "" -}}
+{{- with $cfg.labels -}}{{ $label = index . $role | default "" }}{{ end -}}
+{{- return (dict "member" $member "role" $role "label" $label "alumni" (hasPrefix $role "alumni")) -}}

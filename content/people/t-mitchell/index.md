@@ -1,11 +1,22 @@
 ---
 short: T Mitchell
 title: Travis Mitchell
+position: Lecturer
 tclb: people
-mcf: people
+mcf:
+- people
+- lead
 scopus: '57191284046'
 orcid: 0000-0001-6618-0532
+interests:
+- Multiphase lattice Boltzmann methods
+- Droplet and bubble dynamics
+- Thermocapillary flows
+- Porous and fractured media flow
+- Molten-salt reactors for hydrogen production
 ---
+
+<!-- TODO(MCF): add email/uqprofile/scholar links if wanted -->
 
 Dr. Travis Mitchell is a Lecturer at The University of Queensland (UQ) whose research interests span various areas in computational fluid dynamics. His expertise lies in multiphase lattice Boltzmann methods, droplet and bubble dynamics, thermocapillary flows, and porous and fractured media flow. Dr. Mitchell holds a PhD in mechanical engineering from UQ, as well as a bachelor degrees in engineering (honours) and science, with an extended major in mechanical engineering and a major in mathematics. His current research is centered on the analysis of bubble dynamics in molten-salt reactors for hydrogen production, as well as multiphase flow in fractured subsurface media for storage and production purposes.
 

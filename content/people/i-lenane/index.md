@@ -1,8 +1,6 @@
 ---
 short: I Lenane
 title: I Lenane
-auto_content: yes                                  # DELETE THIS TO NOT AUTO GENERATE CONTENT
-auto_data: yes                                     # DELETE THIS TO NOT AUTO GENERATE METADATA
 tclb: user
 mcf:
 - people
@@ -10,5 +8,7 @@ mcf:
 scopus: '6506559458'
 orcid: .na.character
 ---
+
+<!-- TODO(MCF): full name, photo (thumbnail.jpg in this folder), short bio, email/links; the Scopus profile in this file lists only biology/genetics papers (1995-2008) and no MCF papers - probably a different person; check the Scopus ID before deriving research interests -->
 
 {{< publist >}}

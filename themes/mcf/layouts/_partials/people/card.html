@@ -1,0 +1,21 @@
+{{- /*
+  Directory card for one person.
+  Params: page, label (role label from people/role.html; "" to hide it), level (heading level, default 3).
+*/ -}}
+{{- $p := .page -}}
+{{- $h := printf "h%d" (.level | default 3) -}}
+<article class="mcf-person">
+  <div class="mcf-person__photo">
+    {{- partial "people/avatar.html" (dict "page" $p "size" "md") -}}
+  </div>
+  <div class="mcf-person__body">
+    {{ printf "<%s class=\"mcf-person__name\">" $h | safeHTML }}<a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>{{ printf "</%s>" $h | safeHTML }}
+    {{- with $p.Params.position | default .label }}
+    <p class="mcf-person__position">{{ . }}</p>
+    {{- end }}
+    {{- with $p.Params.interests }}
+    <p class="mcf-person__interests">{{ if reflect.IsSlice . }}{{ delimit (first 2 .) " · " }}{{ else }}{{ . }}{{ end }}</p>
+    {{- end }}
+    {{- partial "people/links.html" (dict "page" $p "compact" true) -}}
+  </div>
+</article>

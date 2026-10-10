@@ -17,14 +17,19 @@ if (file.exists(stfile)) {
 
 if (scopus_token == "") stop("No token")
 
+# Role table. `mcf` column = MCF role (second entry of the `mcf:` list of the
+# person's page): lead, postdoc, phd, masters, honours, alumni-postdoc,
+# alumni-phd, alumni (or no). See themes/mcf/data/people_roles.yaml and the
+# `content/people/` section of README.md. Values in a people file without
+# `auto_data: yes` take precedence over this table.
 tab=read.csv(na.strings = "NA", stringsAsFactors = FALSE,quote = '"',strip.white = TRUE, textConnection('
 id,                           scopus_id,                  orcid,      tclb,            mcf,       ccfd
-"C Leonardi",       "25646377900",  "0000-0001-8596-9125",        no,       lecturer,         no
+"C Leonardi",       "25646377900",  "0000-0001-8596-9125",        no,           lead,         no
 "L Laniewski-Wollk",     "56719775800",  "0000-0002-3026-5881",    author,        postdoc,    adjunkt
-"T Mitchell",            "57191284046",  "0000-0001-6618-0532",    mcontr,       lecturer,         no
-"R Reisabadi",             "36731631700",                     NA,        no,   post-postdoc,         no
-"A Roslin",           "56786451900",                     NA,        no,   post-postdoc,         no
-"N Di Vaira",            "57215219080",  "0000-0002-1302-4859",     contr,            phd,         no
+"T Mitchell",            "57191284046",  "0000-0001-6618-0532",    mcontr,           lead,         no
+"R Reisabadi",             "36731631700",                     NA,        no, alumni-postdoc,         no
+"A Roslin",           "56786451900",                     NA,        no, alumni-postdoc,         no
+"N Di Vaira",            "57215219080",  "0000-0002-1302-4859",     contr,        postdoc,         no
 "B Hill",                 "57215223391",                     NA,      user,            phd,         no
 "S Brennand", "57225237474,57104770100",  "0000-0003-4121-0218",        no,            phd,         no
 "D Sashko",              "57305346800",  "0000-0002-3154-1083",     contr,            phd,         no
