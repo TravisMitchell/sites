@@ -1,0 +1,60 @@
+{{- /*
+  Extra <head> content for the MCF site (Congo includes this at the end of <head>).
+  Congo/Hugo already emit: title, description, canonical, theme-color (kept in sync
+  with light/dark mode by Congo's appearance.js), Open Graph, Twitter cards and
+  WebSite/Article JSON-LD - none of those are repeated here.
+*/ -}}
+{{- if eq site.Params.sitesme "mcf" -}}
+  {{- $card := "img/mcf-social-card.png" -}}
+
+  {{- /* Default social image: only when Hugo found no page image and no site-wide
+         params.images default is configured (otherwise Hugo already emitted one). */ -}}
+  {{- if not (partial "_funcs/get-page-images" .) }}
+    <meta property="og:image" content="{{ $card | absURL }}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="{{ site.Title }} - The University of Queensland" />
+    <meta name="twitter:image" content="{{ $card | absURL }}" />
+  {{- end }}
+
+  {{- /* Organisation structured data on the home page. */ -}}
+  {{- if .IsHome }}
+    {{- $home := site.Home.Permalink -}}
+    {{- $org := dict
+      "@context" "https://schema.org"
+      "@type" "ResearchOrganization"
+      "@id" (printf "%s#organization" $home)
+      "name" site.Title
+      "alternateName" "MCF"
+      "url" $home
+      "logo" ("brand/mcf-mark-256.png" | absURL)
+      "image" ($card | absURL)
+      "foundingDate" "2016"
+      "email" "mailto:t.mitchell@uq.edu.au"
+      "founder" (slice
+        (dict "@type" "Person" "name" "Christopher Leonardi")
+        (dict "@type" "Person" "name" "Travis Mitchell"))
+      "parentOrganization" (dict
+        "@type" "Organization"
+        "name" "School of Mechanical and Mining Engineering"
+        "parentOrganization" (dict
+          "@type" "CollegeOrUniversity"
+          "name" "The University of Queensland"
+          "url" "https://www.uq.edu.au/"))
+      "knowsAbout" (slice
+        "Complex fluids"
+        "Multiphase flow"
+        "Non-Newtonian fluids"
+        "Particle suspensions"
+        "Porous media"
+        "Heat transfer"
+        "Bubble and droplet dynamics"
+        "Computational fluid dynamics")
+    -}}
+    {{- with site.Params.description }}{{ $org = merge $org (dict "description" .) }}{{ end }}
+    {{- /* TODO(MCF): add "address" (PostalAddress) and "sameAs" (official profile URLs) once confirmed. */}}
+    <script type="application/ld+json">
+      {{ $org | jsonify (dict "indent" "  ") | safeJS }}
+    </script>
+  {{- end }}
+{{- end -}}

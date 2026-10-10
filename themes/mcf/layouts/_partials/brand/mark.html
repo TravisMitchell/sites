@@ -1,0 +1,19 @@
+{{- /*
+  MCF mark: a two-phase droplet (abstract fluid / interface motif).
+  Inline SVG so colours follow the colour scheme and dark mode via CSS
+  (see "SECTION: branding" in assets/css/custom.css).
+  Usage: partial "brand/mark.html" (dict "id" "header" "class" "mcf-mark--lg")
+  "id" must be unique per page (it namespaces the clipPath).
+*/ -}}
+{{- $id := printf "mcf-drop-%s" (.id | default "x") -}}
+{{- $drop := "M32 3C25.5 12.5 12 26.5 12 40a20 20 0 0 0 40 0C52 26.5 38.5 12.5 32 3Z" -}}
+{{- $wave := "M-3 41Q4 35 11 41T25 41T39 41T53 41T67 41" -}}
+<svg class="mcf-mark {{ .class }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><clipPath id="{{ $id }}"><path d="{{ $drop }}"/></clipPath></defs>
+  <path class="mcf-mark__upper" d="{{ $drop }}"/>
+  <g clip-path="url(#{{ $id }})">
+    <path class="mcf-mark__lower" d="{{ $wave }}V64H-3Z"/>
+    <path class="mcf-mark__sep" d="{{ $wave }}" fill="none" stroke-width="3.2" stroke-linecap="round"/>
+    <circle class="mcf-mark__bubble" cx="24.5" cy="29" r="3.6"/>
+  </g>
+</svg>

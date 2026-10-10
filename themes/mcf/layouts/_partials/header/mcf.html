@@ -1,0 +1,65 @@
+{{- /*
+  MCF site header: logo + main menu.
+  - Wide screens: inline menu.  Narrow screens: CSS-only toggle (no JS needed).
+  - The current section is highlighted (aria-current="page").
+  - Search keeps Congo's "search-button-*" id so Congo's search.js binds to it.
+  Styles: "SECTION: branding" in assets/css/custom.css.
+*/ -}}
+{{- /* Map content sections onto the menu entry they belong to. */ -}}
+{{- $sectionAlias := dict "posts" "news" "doi" "publications" -}}
+{{- $section := .Section -}}
+{{- with index $sectionAlias $section }}{{ $section = . }}{{ end -}}
+<header class="mcf-header print:hidden">
+  <nav class="mcf-nav" aria-label="{{ i18n "nav.main" | default "Main" }}">
+    <div class="mcf-nav__brand">
+      {{ partial "logo.html" . }}
+    </div>
+    {{ if or .Site.Menus.main (.Site.Params.enableSearch | default false) }}
+      <input
+        type="checkbox"
+        id="mcf-menu-toggle"
+        class="mcf-nav__toggle"
+        aria-label="Toggle navigation menu"
+        aria-controls="mcf-menu"
+      />
+      <label for="mcf-menu-toggle" class="mcf-nav__burger" aria-hidden="true">
+        <span class="mcf-nav__icon-open">{{ partial "icon.html" "bars" }}</span>
+        <span class="mcf-nav__icon-close">{{ partial "icon.html" "xmark" }}</span>
+      </label>
+      <ul id="mcf-menu" class="mcf-nav__menu">
+        {{ range .Site.Menus.main }}
+          {{ if .Params.action }}{{ continue }}{{ end }}
+          {{ $active := or ($.IsMenuCurrent "main" .) ($.HasMenuCurrent "main" .) }}
+          {{ if and (not $active) $section (not $.IsHome) }}
+            {{ $active = eq (path.Base (strings.TrimSuffix "/" .URL)) $section }}
+          {{ end }}
+          <li>
+            <a
+              href="{{ .URL }}"
+              class="mcf-nav__link{{ if $active }} is-active{{ end }}"
+              {{ with .Title }}title="{{ . }}"{{ end }}
+              {{ if $active }}aria-current="{{ if $.IsMenuCurrent "main" . }}page{{ else }}true{{ end }}"{{ end }}
+              {{ with .Params.target }}target="{{ . }}"{{ end }}
+              >{{ with .Params.icon }}{{ partial "icon.html" . }}{{ end }}{{ .Name | markdownify | emojify }}</a
+            >
+          </li>
+        {{ end }}
+        {{ if .Site.Params.enableSearch | default false }}
+          <li>
+            <button
+              id="search-button-m0"
+              class="mcf-nav__link mcf-nav__search"
+              type="button"
+              title="{{ i18n "search.open_button_title" }}"
+              aria-label="{{ i18n "search.open_button_title" }}"
+            >
+              {{ partial "icon.html" "search" }}<span class="mcf-nav__search-label"
+                >{{ i18n "search.open_button_title" }}</span
+              >
+            </button>
+          </li>
+        {{ end }}
+      </ul>
+    {{ end }}
+  </nav>
+</header>
