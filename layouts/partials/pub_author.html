@@ -1,17 +1,33 @@
-{{- $site := .site -}}
+{{- /*
+  Renders one author name of a publication.
+  Input (dict):
+    id        - author ID, e.g. "T Mitchell" (required)
+    name      - printed name, e.g. "T.J. Mitchell" (defaults to id)
+    highlight - author ID to emphasise (the "current" person); optional
+    page      - current page; if no highlight is given, page.Params.short is used
+  Output:
+    <strong class="pub-author pub-self">  for the highlighted person
+    <a class="pub-author [pub-member]">   if the person has a page in content/people/
+                                           (pub-member: in the current site's "people" group)
+    <span class="pub-author">              otherwise
+*/ -}}
 {{- $id := .id -}}
-{{- $url := "" -}}
-{{- $purl := (printf "/people/%s/" ($id | urlize)) -}}
-{{- with .site -}}
-{{-   range where .RegularPages "RelPermalink" $purl -}}
-{{-     $url = .RelPermalink -}}
+{{- $name := .name | default .id -}}
+{{- $highlight := .highlight | default "" -}}
+{{- if not $highlight -}}
+{{-   with .page -}}{{- with .Params.short -}}{{- $highlight = . -}}{{- end -}}{{- end -}}
+{{- end -}}
+{{- $person := site.GetPage (printf "/people/%s" ($id | urlize)) -}}
+{{- $member := false -}}
+{{- with $person -}}
+{{-   with index .Params (string site.Params.sitesme) -}}
+{{-     $member = in . "people" -}}
 {{-   end -}}
 {{- end -}}
-{{- if eq (lower .id) (lower .page.Params.short) -}}
-<b>{{ .name }}</b>
+{{- if and $highlight (eq (lower $id) (lower $highlight)) -}}
+<strong class="pub-author pub-self">{{ $name }}</strong>
+{{- else if $person -}}
+<a class="pub-author{{ if $member }} pub-member{{ end }}" href="{{ $person.RelPermalink }}">{{ $name }}</a>
 {{- else -}}
-{{- if $url -}}<a href="{{ $url }}">{{- end -}}
-{{ .name }}
-{{- if $url -}}</a>{{- end -}}
+<span class="pub-author">{{ $name }}</span>
 {{- end -}}
-

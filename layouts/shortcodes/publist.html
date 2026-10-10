@@ -1,18 +1,37 @@
+{{- /*
+  Publication summary for a profile page: {{< publist >}} or {{< publist "T Mitchell" >}}
+  Shows up to 5 most-cited publications (only those with citations), then up to 5
+  recent publications not already listed, and a link to the full list (/authors/<id>/).
+*/ -}}
 {{- $page := .Page -}}
-{{- $site := .Site -}}
-{{- $author := $page.Params.short -}}
-{{- if .Get 0 -}}
-{{-   $author = .Get 0 -}}
-{{- end -}}
-<h3>Top Publications (<a href="/authors/{{ $author | urlize }}">View all</a>)</h3>
-<ul>
-{{ range $value := first 5 ( sort (where .Site.RegularPages ".Params.authors" "intersect" (slice $author)) ".Params.scopus_cite" "desc") }}
-<li>{{ partial "doi.html" (dict "page" $page "site" $site "article" $value) }}</li>
-{{ end }}
+{{- $author := .Get 0 | default $page.Params.short -}}
+{{- $pubs := where site.RegularPages "Params.authors" "intersect" (slice $author) -}}
+{{- $n := 5 -}}
+{{- $top := first $n (sort (where $pubs "Params.scopus_cite" "gt" 0) "Params.scopus_cite" "desc") -}}
+{{- $recent := first $n (complement $top $pubs.ByDate.Reverse) -}}
+{{- $allurl := printf "/authors/%s/" ($author | urlize) -}}
+{{- with site.GetPage (printf "/authors/%s" ($author | urlize)) -}}{{- $allurl = .RelPermalink -}}{{- end -}}
+<div class="publist">
+{{- if $pubs }}
+{{- with $top }}
+<h3 class="publist-heading">Most cited</h3>
+<ul class="pub-list not-prose">
+{{- range . }}
+{{ partial "pub/item.html" (dict "article" . "highlight" $author) }}
+{{- end }}
 </ul>
-<h3>Recent Publications (<a href="/authors/{{ $author | urlize }}">View all</a>)</h3>
-<ul>
-{{ range $value := first 5 (where .Site.RegularPages ".Params.authors" "intersect" (slice $author)).ByDate.Reverse }}
-<li>{{ partial "doi.html" (dict "page" $page "site" $site "article" $value) }}</li>
-{{ end }}
+{{- end }}
+{{- with $recent }}
+<h3 class="publist-heading">{{ if $top }}Recent{{ else }}Recent publications{{ end }}</h3>
+<ul class="pub-list not-prose">
+{{- range . }}
+{{ partial "pub/item.html" (dict "article" . "highlight" $author) }}
+{{- end }}
 </ul>
+{{- end }}
+<p class="publist-all"><a href="{{ $allurl }}">View all {{ len $pubs }} publication{{ if ne (len $pubs) 1 }}s{{ end }} &rarr;</a></p>
+{{- else }}
+<p class="publist-empty"><em>No publications listed yet.</em></p>
+{{- end }}
+</div>
+{{- /**/ -}}

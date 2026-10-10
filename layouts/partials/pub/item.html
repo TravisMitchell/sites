@@ -1,0 +1,50 @@
+{{- /*
+  One publication as a list item (block layout):
+    Title (linked)
+    Authors
+    Journal, Year · Type · Cited by N · DOI
+    [Abstract]
+  Input (dict):
+    article   - publication page (required)
+    highlight - author ID to emphasise (optional; defaults to page.Params.short)
+    page      - current page (optional)
+    abstract  - true to add a collapsible abstract (optional)
+  Reads fine without any CSS (used on tclb.io too).
+*/ -}}
+{{- $a := .article -}}
+{{- $highlight := .highlight | default "" -}}
+{{- if not $highlight -}}
+{{-   with .page -}}{{- with .Params.short -}}{{- $highlight = . -}}{{- end -}}{{- end -}}
+{{- end -}}
+{{- $c := partialCached "pub/parts.html" (dict "article" $a "highlight" $highlight) $a.Path $highlight -}}
+{{- $search := lower (delimit (slice $c.title $c.names $c.journal $c.year $c.doi) " ") -}}
+<li class="pub-item" data-type="{{ $c.type }}" data-search="{{ $search }}">
+  {{- /* spans + <br> (not divs) so it also reads well in themes without this CSS */}}
+  <span class="pub-headline"><a href="{{ $c.href }}">{{ $c.title }}</a></span><br class="pub-br">
+  {{- with $c.authors }}
+  <span class="pub-authors">{{ . }}</span><br class="pub-br">
+  {{- end }}
+  {{- $venue := slice -}}
+  {{- with $c.journal }}{{ $venue = $venue | append (printf `<i class="pub-journal">%s</i>` (htmlEscape .)) }}{{ end -}}
+  {{- with $c.year }}{{ $venue = $venue | append (printf `<span class="pub-year">%s</span>` .) }}{{ end -}}
+  {{- $meta := slice -}}
+  {{- with $venue }}{{ $meta = $meta | append (delimit . ", ") }}{{ end -}}
+  {{- if and $c.type (ne $c.type "Article") }}{{ $meta = $meta | append (printf `<span class="pub-badge">%s</span>` (htmlEscape $c.type)) }}{{ end -}}
+  {{- if gt $c.cites 0 }}{{ $meta = $meta | append (printf `<span class="pub-cites" title="Citations in Scopus">Cited by %d</span>` $c.cites) }}{{ end -}}
+  {{- with $c.doiurl }}{{ $meta = $meta | append (printf `<a class="pub-doi" href="%s" title="doi:%s">DOI</a>` (htmlEscape .) (htmlEscape $c.doi)) }}{{ end }}
+  <span class="pub-meta">{{ delimit $meta `<span class="pub-sep" aria-hidden="true"> · </span>` | safeHTML }}</span>
+  {{- if .abstract }}
+  {{- $text := $a.Plain | htmlUnescape | replaceRE `^\s*#?\s*Abstract\s*#?\s*` "" | strings.TrimSpace -}}
+  {{- with $text }}
+  {{- $isAbstract := strings.Contains $a.RawContent "## Abstract" }}
+  <details class="pub-abstract">
+    <summary>{{ if $isAbstract }}Abstract{{ else }}Summary{{ end }}</summary>
+    <p>{{ . | truncate 2500 }}</p>
+    {{- if not $a.Params.redirect }}
+    <p><a href="{{ $a.RelPermalink }}">Read more</a></p>
+    {{- end }}
+  </details>
+  {{- end }}
+  {{- end }}
+</li>
+{{- /**/ -}}
