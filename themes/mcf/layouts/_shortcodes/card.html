@@ -1,0 +1,14 @@
+{{- /*
+  A single card, normally inside {{< cards >}}.
+  Params: title (required), icon (optional, any Congo icon name, e.g. email,
+  globe, link, lightbulb, comment, phone).
+*/ -}}
+<div class="mcf-card">
+  {{- with .Get "title" }}
+  <p class="mcf-card__title">
+    {{- with $.Get "icon" }}<span class="mcf-card__icon">{{ partial "icon.html" . }}</span>{{ end -}}
+    {{ . }}
+  </p>
+  {{- end }}
+  <div class="mcf-card__body">{{ .Inner | markdownify }}</div>
+</div>

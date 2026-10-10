@@ -1,0 +1,40 @@
+{{- /*
+  Selected publications by DOI.
+
+  Usage:
+    {{< pubs "10.1063/5.0227299" "10.1016/j.jcp.2024.113337" >}}
+
+  Each DOI must have a page at content/doi/<DOI>.md. Publications are shown
+  in the order given, rendered with the shared partial "doi.html".
+  A missing DOI produces a build warning (and is skipped).
+*/ -}}
+{{- $page := .Page -}}
+{{- $site := .Site -}}
+{{- $items := slice -}}
+{{- range .Params -}}
+  {{- $doi := trim (string .) " " -}}
+  {{- $p := site.GetPage (printf "/doi/%s" $doi) -}}
+  {{- if not $p -}}
+    {{- /* Fall back to matching the doi front matter (case-insensitive). */ -}}
+    {{- range where site.RegularPages "Section" "doi" -}}
+      {{- if and (not $p) (eq (lower (string .Params.doi)) (lower $doi)) -}}
+        {{- $p = . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $p -}}
+    {{- $items = $items | append . -}}
+  {{- else -}}
+    {{- warnf "[pubs] %s: no publication page for DOI %q (expected content/doi/%s.md)" $page.File.Path $doi $doi -}}
+  {{- end -}}
+{{- end -}}
+{{- with $items }}
+<div class="mcf-pubs not-prose">
+  <p class="mcf-pubs__label">Selected publications</p>
+  <ul class="mcf-pubs__list">
+    {{- range . }}
+    <li>{{ partial "doi.html" (dict "page" $page "site" $site "article" .) }}</li>
+    {{- end }}
+  </ul>
+</div>
+{{- end }}

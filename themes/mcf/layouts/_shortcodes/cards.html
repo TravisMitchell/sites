@@ -1,0 +1,12 @@
+{{- /*
+  Responsive grid of cards. Wrap one or more {{< card >}} shortcodes.
+
+  Usage:
+    {{< cards >}}
+      {{< card title="Email" icon="email" >}}Markdown...{{< /card >}}
+      {{< card title="Location" icon="globe" >}}Markdown...{{< /card >}}
+    {{< /cards >}}
+*/ -}}
+<div class="mcf-cards not-prose">
+{{ .Inner }}
+</div>

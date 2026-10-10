@@ -1,0 +1,45 @@
+{{- /*
+  Current opportunities: every page assigned to the MCF "jobs" category
+  (front matter `mcf: [jobs]`), newest first.
+
+  Usage:
+    {{< opportunities >}}
+    {{< opportunities >}}Custom text shown when nothing is listed.{{< /opportunities >}}
+
+  Pages stop being listed automatically once their Hugo `expiryDate` passes.
+*/ -}}
+{{- $jobs := slice -}}
+{{- with site.Taxonomies.mcf -}}
+  {{- with index . "jobs" -}}
+    {{- $jobs = .Pages.ByDate.Reverse -}}
+  {{- end -}}
+{{- end -}}
+<div class="mcf-opps not-prose">
+{{- if $jobs }}
+  <ul class="mcf-opps__list">
+    {{- range $jobs }}
+    <li class="mcf-opps__item">
+      <a class="mcf-opps__title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+      <div class="mcf-opps__meta">
+        Posted {{ partial "functions/date.html" .Date }}
+        {{- with .ExpiryDate }}{{ if not .IsZero }} &middot; Closes {{ partial "functions/date.html" . }}{{ end }}{{ end }}
+      </div>
+      {{- with (.Params.summary | default .Description) }}
+      <p class="mcf-opps__summary">{{ . | markdownify }}</p>
+      {{- end }}
+    </li>
+    {{- end }}
+  </ul>
+{{- end }}
+  <p class="mcf-opps__fallback">
+    {{- with .Inner -}}
+      {{ . | markdownify }}
+    {{- else -}}
+      {{- if $jobs -}}
+        Don't see a project that fits? We still welcome enquiries from motivated students and researchers.
+      {{- else -}}
+        There are no advertised positions at the moment, but we still welcome enquiries from motivated students and researchers.
+      {{- end -}}
+    {{- end -}}
+  </p>
+</div>

@@ -9,6 +9,7 @@ tclb:
 sites:
 - mcf
 date: '2023-03-01'
+summary: PhD project to numerically investigate the hydrodynamics and chemical kinetics of methane pyrolysis in molten-salt bubble reactors, enabling large-scale reactor design for low-emission hydrogen production.
 thumbnail: methane-pyrolysis.png
 ---
 

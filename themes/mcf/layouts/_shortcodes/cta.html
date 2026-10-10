@@ -1,0 +1,26 @@
+{{- /*
+  Call-to-action panel.
+
+  Usage:
+    {{< cta title="Collaborate with us" button="Get in touch" href="/contact/" >}}
+    Markdown text...
+    {{< /cta >}}
+
+  Optional second button: button2="..." href2="...".
+*/ -}}
+<aside class="mcf-cta not-prose">
+  {{- with .Get "title" }}
+  <p class="mcf-cta__title">{{ . }}</p>
+  {{- end }}
+  <div class="mcf-cta__body">{{ .Inner | markdownify }}</div>
+  {{- if or (.Get "button") (.Get "button2") }}
+  <div class="mcf-cta__actions">
+    {{- with .Get "button" }}
+    <a class="mcf-btn mcf-btn--primary" href="{{ $.Get "href" | default "/contact/" }}">{{ . }}</a>
+    {{- end }}
+    {{- with .Get "button2" }}
+    <a class="mcf-btn mcf-btn--secondary" href="{{ $.Get "href2" | default "/contact/" }}">{{ . }}</a>
+    {{- end }}
+  </div>
+  {{- end }}
+</aside>
