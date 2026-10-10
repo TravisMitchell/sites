@@ -1,0 +1,62 @@
+{{- /*
+  Site logo / title.
+  1. If params.header.logo is configured, behave like Congo (image logo, optional
+     dark variant) - but without crashing on SVG logos, which have no pixel size.
+  2. Otherwise, on the MCF site, render the inline MCF mark + wordmark.
+  3. Otherwise (e.g. za), fall back to Congo's plain site title.
+*/ -}}
+{{- $showTitle := .Site.Params.header.showTitle | default true -}}
+{{- if .Site.Params.header.logo -}}
+  {{- $logo := resources.Get .Site.Params.header.logo -}}
+  {{- $logo_dark := "" -}}
+  {{- with .Site.Params.header.logoDark }}{{ $logo_dark = resources.Get . }}{{ end -}}
+  {{- if $logo }}
+    <a href="{{ "" | relLangURL }}" class="mr-2">
+      {{- range $i, $img := slice $logo $logo_dark -}}
+        {{- if $img -}}
+          {{- $cls := "" -}}
+          {{- if $logo_dark -}}{{- $cls = cond (eq $i 0) "flex dark:hidden" "hidden dark:flex" -}}{{- end -}}
+          {{- $dims := "" -}}
+          {{- if ne $img.MediaType.SubType "svg" -}}
+            {{- $dims = printf `width="%d" height="%d"` (div $img.Width 2) (div $img.Height 2) -}}
+          {{- end }}
+      <img
+        src="{{ $img.RelPermalink }}"
+        {{ $dims | safeHTMLAttr }}
+        class="max-h-[10rem] max-w-[10rem] object-scale-down object-left {{ $cls }}"
+        alt="{{ $.Site.Title }}"
+      />
+        {{- end -}}
+      {{- end }}
+    </a>
+  {{- end }}
+  {{- if $showTitle }}
+    <a
+      class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2"
+      rel="me"
+      href="{{ "" | relLangURL }}"
+      >{{ .Site.Title | markdownify | emojify }}</a
+    >
+  {{- end }}
+{{- else if eq site.Params.sitesme "mcf" -}}
+  <a class="mcf-brand" href="{{ "" | relLangURL }}" rel="me" title="{{ .Site.Title }}">
+    {{ partial "brand/mark.html" (dict "id" "logo" "class" "mcf-brand__mark") }}
+    <span class="mcf-brand__text">
+      <span class="mcf-brand__abbr">MCF</span>
+      {{- if $showTitle }}
+        <span class="mcf-brand__name">{{ .Site.Title | markdownify | emojify }}</span>
+      {{- else }}
+        <span class="mcf-sr-only">{{ .Site.Title }}</span>
+      {{- end }}
+    </span>
+  </a>
+{{- else -}}
+  {{- if $showTitle }}
+    <a
+      class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2"
+      rel="me"
+      href="{{ "" | relLangURL }}"
+      >{{ .Site.Title | markdownify | emojify }}</a
+    >
+  {{- end }}
+{{- end -}}

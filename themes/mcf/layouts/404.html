@@ -1,0 +1,40 @@
+{{ define "main" }}
+  {{- if eq site.Params.sitesme "mcf" }}
+    <section class="mcf-404">
+      {{ partial "brand/mark.html" (dict "id" "404" "class" "mcf-404__mark") }}
+      <p class="mcf-404__code">Error 404</p>
+      <h1 class="mcf-404__title">This page has flowed away</h1>
+      <p class="mcf-404__lead">
+        We couldn&rsquo;t find the page you were looking for. It may have moved when the site was
+        reorganised, or the link may be mistyped.
+      </p>
+      <div class="mcf-404__actions">
+        <a class="mcf-btn mcf-btn--primary" href="{{ "" | relLangURL }}">Go to the home page</a>
+        {{- if site.Params.enableSearch | default false }}
+          <button id="search-button-404" class="mcf-btn mcf-btn--ghost" type="button">
+            {{ partial "icon.html" "search" }}Search the site
+          </button>
+        {{- end }}
+      </div>
+      {{- with site.Menus.main }}
+        <nav class="mcf-404__links" aria-labelledby="mcf-404-links">
+          <h2 id="mcf-404-links">Popular pages</h2>
+          <ul>
+            {{- range . }}
+              {{- if .Params.action }}{{ continue }}{{ end }}
+              <li><a href="{{ .URL }}">{{ .Name | markdownify | emojify }}</a></li>
+            {{- end }}
+          </ul>
+        </nav>
+      {{- end }}
+    </section>
+  {{- else }}
+    <h1 class="mb-3 text-4xl font-extrabold">{{ i18n "error.404_title" | emojify }}</h1>
+    <p class="mb-12 mt-8 text-neutral-400 dark:text-neutral-500">
+      {{ i18n "error.404_error" | emojify }}
+    </p>
+    <div class="prose dark:prose-invert">
+      <p>{{ i18n "error.404_description" | emojify }}</p>
+    </div>
+  {{- end }}
+{{ end }}

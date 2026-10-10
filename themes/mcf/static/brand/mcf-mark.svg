@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="MCF">
+  <title>Modelling Complex Fluids (MCF)</title>
+  <defs><clipPath id="mcf-drop"><path d="M32 3C25.5 12.5 12 26.5 12 40a20 20 0 0 0 40 0C52 26.5 38.5 12.5 32 3Z"/></clipPath></defs>
+  <path d="M32 3C25.5 12.5 12 26.5 12 40a20 20 0 0 0 40 0C52 26.5 38.5 12.5 32 3Z" fill="#51247a"/>
+  <g clip-path="url(#mcf-drop)">
+    <path d="M-3 41Q4 35 11 41T25 41T39 41T53 41T67 41V64H-3Z" fill="#14b8a6"/>
+    <path d="M-3 41Q4 35 11 41T25 41T39 41T53 41T67 41" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round"/>
+    <circle cx="24.5" cy="29" r="3.6" fill="#ffffff"/>
+  </g>
+</svg>

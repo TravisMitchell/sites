@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="0" fill="#51247a"/>
+  <g transform="translate(8.96 9.96) scale(0.72)">
+  <defs><clipPath id="mcf-drop-i"><path d="M32 3C25.5 12.5 12 26.5 12 40a20 20 0 0 0 40 0C52 26.5 38.5 12.5 32 3Z"/></clipPath></defs>
+  <path d="M32 3C25.5 12.5 12 26.5 12 40a20 20 0 0 0 40 0C52 26.5 38.5 12.5 32 3Z" fill="#ffffff"/>
+  <g clip-path="url(#mcf-drop-i)">
+    <path d="M-3 41Q4 35 11 41T25 41T39 41T53 41T67 41V64H-3Z" fill="#2dd4bf"/>
+    <path d="M-3 41Q4 35 11 41T25 41T39 41T53 41T67 41" fill="none" stroke="#51247a" stroke-width="3.2" stroke-linecap="round"/>
+    <circle cx="24.5" cy="29" r="3.6" fill="#51247a"/>
+  </g>
+  </g>
+</svg>
