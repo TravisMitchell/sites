@@ -1,0 +1,38 @@
+{{- /* Compact citation for the homepage publication list.
+     Context: dict "page" <publication page> "max" <max authors before "et al."> */ -}}
+{{- $a := .page -}}
+{{- $max := .max | default 6 -}}
+{{- $doi := $a.Params.doi -}}
+{{- $doiURL := cond (gt (len (string ($doi | default ""))) 0) (printf "https://doi.org/%s" $doi) "" -}}
+{{- $href := $a.Params.redirect | default $doiURL | default $a.RelPermalink -}}
+
+{{- /* Authors: prefer realauthors (list of {id: display name}), else authors. */ -}}
+{{- $names := slice -}}
+{{- with $a.Params.realauthors -}}
+  {{- range . }}{{ range $id, $name := . }}{{ $names = $names | append (dict "id" $id "name" $name) }}{{ end }}{{ end -}}
+{{- else -}}
+  {{- range $a.Params.authors }}{{ $names = $names | append (dict "id" . "name" .) }}{{ end -}}
+{{- end -}}
+
+<li class="mcf-pub">
+  <h3 class="mcf-pub-title"><a href="{{ $href }}"{{ if hasPrefix $href "http" }} rel="external"{{ end }}>{{ $a.Title }}</a></h3>
+  <p class="mcf-pub-meta">
+    {{- with $names }}
+    <span class="mcf-pub-authors">
+      {{- range $i, $au := first $max . -}}
+        {{- if $i }}, {{ end -}}
+        {{- $person := site.GetPage (printf "/people/%s" (urlize $au.id)) -}}
+        {{- if and $person (index $person.Params site.Params.sitesme) -}}
+          <a href="{{ $person.RelPermalink }}">{{ $au.name }}</a>
+        {{- else -}}
+          {{ $au.name }}
+        {{- end -}}
+      {{- end -}}
+      {{- if gt (len .) $max }}, et&nbsp;al.{{ end -}}
+    </span>
+    {{- end }}
+    {{- with $a.Params.journal }}<span class="mcf-pub-sep" aria-hidden="true"> · </span><cite class="mcf-pub-journal">{{ . }}</cite>{{ end }}
+    {{- if not $a.Date.IsZero }}<span class="mcf-pub-sep" aria-hidden="true"> · </span><span class="mcf-pub-year">{{ $a.Date.Year }}</span>{{ end }}
+    {{- with $doi }} <a class="mcf-pub-doi" href="{{ $doiURL }}" rel="external" aria-label="DOI {{ . }}">DOI</a>{{ end }}
+  </p>
+</li>

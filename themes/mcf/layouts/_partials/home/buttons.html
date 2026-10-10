@@ -1,0 +1,15 @@
+{{- /* Row of call-to-action buttons.
+     Context: slice of maps with keys label, url, style ("primary" | "secondary"). */ -}}
+{{- with . -}}
+<div class="mcf-actions">
+  {{- range . }}
+    {{- if and .label .url }}
+      {{- $external := hasPrefix .url "http" }}
+      <a class="mcf-btn mcf-btn--{{ .style | default "primary" }}" href="{{ .url | relURL }}"{{ if $external }} rel="external"{{ end }}>
+        {{- .label -}}
+        <span class="mcf-btn-arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    {{- end }}
+  {{- end }}
+</div>
+{{- end -}}

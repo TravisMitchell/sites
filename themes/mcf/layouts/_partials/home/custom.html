@@ -1,0 +1,230 @@
+{{- /*
+  MCF homepage (Congo `params.homepage.layout: custom`).
+
+  All content comes from the `home:` block in the home page front matter
+  (themes/mcf/content/_index.md). Every section is optional and is hidden when
+  it has no data. The rich layout is only used when `home.site` matches
+  `site.Params.sitesme`, so other sites sharing this theme (e.g. za) fall back
+  to Congo's plain page layout.
+*/ -}}
+{{- $home := .Params.home -}}
+{{- $me := site.Params.sitesme | default "" -}}
+{{- if and $home (eq (string ($home.site | default $me)) (string $me)) -}}
+
+{{- /* ---------- Data ---------- */ -}}
+{{- $taxKey := $home.taxonomy | default $me -}}
+{{- $tax := dict -}}
+{{- with $taxKey }}{{ with index site.Taxonomies . }}{{ $tax = . }}{{ end }}{{ end -}}
+
+{{- $pubs := slice -}}
+{{- with index $tax "publications" }}{{ $pubs = .Pages.ByDate.Reverse }}{{ end -}}
+
+{{- $news := slice -}}
+{{- with index $tax "news" }}{{ $news = .Pages.ByDate.Reverse }}{{ end -}}
+
+{{- $stats := $home.stats | default dict -}}
+{{- $excl := $stats.exclude_role_prefixes | default (slice "alumni") -}}
+{{- $members := slice -}}
+{{- with index $tax "people" -}}
+  {{- range .Pages -}}
+    {{- $roles := index .Params $taxKey -}}
+    {{- if not (reflect.IsSlice $roles) }}{{ $roles = slice $roles }}{{ end -}}
+    {{- $current := true -}}
+    {{- range $roles -}}
+      {{- $r := lower (string .) -}}
+      {{- range $excl }}{{ if hasPrefix $r (lower .) }}{{ $current = false }}{{ end }}{{ end -}}
+    {{- end -}}
+    {{- if $current }}{{ $members = $members | append . }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $cites := 0 -}}
+{{- range $pubs }}{{ $cites = add $cites (int (.Params.scopus_cite | default 0)) }}{{ end -}}
+
+{{- $metrics := dict "publications" (len $pubs) "members" (len $members) "citations" $cites -}}
+
+<div class="mcf-home">
+
+  {{- /* ---------- Hero ---------- */ -}}
+  {{- with $home.hero }}
+  <section class="mcf-hero" aria-labelledby="mcf-hero-title">
+    {{ partial "home/hero-art.html" . }}
+    <div class="mcf-hero-body">
+      {{- with .eyebrow }}
+      <p class="mcf-eyebrow">
+        {{- $parts := split . " · " }}
+        {{- range $i, $part := $parts }}{{ if $i }} {{ end }}<span class="mcf-eyebrow-part">{{ $part }}{{ if lt (add $i 1) (len $parts) }}<span aria-hidden="true">&nbsp;·</span>{{ end }}</span>{{ end -}}
+      </p>
+      {{- end }}
+      <h1 id="mcf-hero-title" class="mcf-hero-title">{{ .title | default site.Title }}</h1>
+      {{- with .tagline }}<p class="mcf-hero-tagline">{{ . }}</p>{{ end }}
+      {{- with .summary }}<p class="mcf-hero-summary">{{ . | markdownify }}</p>{{ end }}
+      {{ partial "home/buttons.html" .buttons }}
+    </div>
+  </section>
+  {{- end }}
+
+  {{- /* ---------- At a glance ---------- */ -}}
+  {{- $tiles := slice -}}
+  {{- range $stats.items -}}
+    {{- $v := .value -}}
+    {{- with .metric }}{{ $n := index $metrics . }}{{ if $n }}{{ $v = lang.FormatNumber 0 $n }}{{ else }}{{ $v = "" }}{{ end }}{{ end -}}
+    {{- if and $v .label }}{{ $tiles = $tiles | append (dict "value" $v "label" .label "url" .url) }}{{ end -}}
+  {{- end -}}
+  {{- with $tiles }}
+  <section class="mcf-stats-wrap" aria-label="The group at a glance">
+    <dl class="mcf-stats">
+      {{- range . }}
+      <div class="mcf-stat">
+        <dt class="mcf-stat-label">
+          {{- if .url }}<a href="{{ .url | relURL }}">{{ .label }}</a>{{ else }}{{ .label }}{{ end -}}
+        </dt>
+        <dd class="mcf-stat-value">{{ .value }}</dd>
+      </div>
+      {{- end }}
+    </dl>
+  </section>
+  {{- end }}
+
+  {{- /* ---------- About ---------- */ -}}
+  {{- $about := $home.about | default dict -}}
+  {{- $img := false -}}
+  {{- with $about.image -}}
+    {{- with resources.Get . }}{{ $img = . }}{{ else }}
+      {{- with site.GetPage (path.Dir .) }}{{ with .Resources.Get (path.Base $about.image) }}{{ $img = . }}{{ end }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if or .Content $img }}
+  <section class="mcf-section mcf-about" aria-labelledby="mcf-about-title">
+    <h2 id="mcf-about-title" class="mcf-h2">{{ $about.title | default "About" }}</h2>
+    {{- with .Content }}
+    <div class="mcf-about-text prose max-w-none dark:prose-invert">{{ . }}</div>
+    {{- end }}
+    {{- with $img }}
+      {{- $src := . }}
+      {{- /* Optional crop steps, e.g. ["1740x515 Bottom", "1740x395 Top"]. */}}
+      {{- range $about.image_crop }}{{ $src = $src.Crop . }}{{ end }}
+      {{- $small := $src.Resize "800x webp" }}
+      {{- $large := $src.Resize "1600x webp" }}
+      <figure class="mcf-figure">
+        <div class="mcf-figure-frame">
+          <img src="{{ $large.RelPermalink }}"
+               srcset="{{ $small.RelPermalink }} 800w, {{ $large.RelPermalink }} 1600w"
+               sizes="(min-width: 1280px) 1024px, 100vw"
+               width="{{ $large.Width }}" height="{{ $large.Height }}"
+               alt="{{ $about.image_alt | default "" }}" loading="lazy" decoding="async">
+        </div>
+        {{- with $about.caption }}
+        <figcaption class="mcf-caption">
+          {{ . }}
+          {{- with $about.caption_link }} <a href="{{ . | relURL }}">{{ $about.caption_link_label | default "Read more" }}<span aria-hidden="true"> &rarr;</span></a>{{ end }}
+        </figcaption>
+        {{- end }}
+      </figure>
+    {{- end }}
+  </section>
+  {{- end }}
+
+  {{- /* ---------- Research themes ---------- */ -}}
+  {{- with $home.research }}{{ with .themes }}
+  {{- $r := $home.research }}
+  {{- $base := $r.more_url | default "/research/" }}
+  <section class="mcf-section" aria-labelledby="mcf-research-title">
+    <div class="mcf-section-head">
+      <div>
+        <h2 id="mcf-research-title" class="mcf-h2">{{ $r.title | default "Research" }}</h2>
+        {{- with $r.intro }}<p class="mcf-lead">{{ . }}</p>{{ end }}
+      </div>
+      <a class="mcf-more" href="{{ $base | relURL }}">{{ $r.more_label | default "Explore our research" }}<span aria-hidden="true"> &rarr;</span></a>
+    </div>
+    <ul class="mcf-themes" role="list">
+      {{- range . }}
+      {{- $href := .url | default (printf "%s#%s" $base (.anchor | default (urlize .title))) }}
+      <li class="mcf-theme{{ if .wide }} mcf-theme--wide{{ end }}">
+        <span class="mcf-theme-icon">{{ partial "home/icon.html" .icon }}</span>
+        <div class="mcf-theme-body">
+          <h3 class="mcf-theme-title"><a class="mcf-stretched" href="{{ $href | relURL }}">{{ .title }}</a></h3>
+          {{- with .blurb }}<p class="mcf-theme-blurb">{{ . | markdownify }}</p>{{ end }}
+          <p class="mcf-theme-links">
+            <span class="mcf-theme-more" aria-hidden="true">Learn more &rarr;</span>
+            {{- range .links }}
+            <a class="mcf-theme-extra" href="{{ .url }}"{{ if hasPrefix .url "http" }} rel="external"{{ end }}>{{ .label }}<span aria-hidden="true"> &nearr;</span></a>
+            {{- end }}
+          </p>
+        </div>
+      </li>
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}{{ end }}
+
+  {{- /* ---------- News + publications ---------- */ -}}
+  {{- $n := $home.news | default dict -}}
+  {{- $p := $home.publications | default dict -}}
+  {{- $newsItems := cond (isset $home "news") (first ($n.count | default 3) $news) slice -}}
+  {{- $pubItems := cond (isset $home "publications") (first ($p.count | default 5) $pubs) slice -}}
+  {{- if or $newsItems $pubItems }}
+  <div class="mcf-section mcf-split{{ if and $newsItems $pubItems }} mcf-split--two{{ end }}">
+
+    {{- with $newsItems }}
+    <section class="mcf-news" aria-labelledby="mcf-news-title">
+      <div class="mcf-section-head">
+        <h2 id="mcf-news-title" class="mcf-h2">{{ $n.title | default "Latest news" }}</h2>
+        {{- with $n.more_url }}<a class="mcf-more" href="{{ . | relURL }}">{{ $n.more_label | default "All news" }}<span aria-hidden="true"> &rarr;</span></a>{{ end }}
+      </div>
+      <ul class="mcf-news-list" role="list">
+        {{- range . }}
+        {{- $ext := partial "re_url.html" . }}
+        {{- $href := $ext | default .RelPermalink }}
+        {{- $images := .Resources.ByType "image" }}
+        {{- $thumb := $images.GetMatch (.Params.thumbnail | default "*thumb*") | default ($images.GetMatch (.Params.feature | default "*feature*")) }}
+        <li class="mcf-news-item">
+          {{- with $thumb }}
+          {{- $t := .Fill "240x180 Center webp" }}
+          <img class="mcf-news-thumb" src="{{ $t.RelPermalink }}" width="120" height="90" alt="" loading="lazy" decoding="async">
+          {{- end }}
+          <div class="mcf-news-body">
+            <time class="mcf-meta" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
+            <h3 class="mcf-news-title"><a class="mcf-stretched" href="{{ $href }}"{{ if $ext }} rel="external"{{ end }}>{{ .Title }}</a></h3>
+            {{- $sum := .Params.summary | default .Params.description | default (.Summary | plainify) | default .Plain }}
+            {{- with $sum }}<p class="mcf-news-summary">{{ . | truncate 220 }}</p>{{ end }}
+          </div>
+        </li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}
+
+    {{- with $pubItems }}
+    <section class="mcf-pubs" aria-labelledby="mcf-pubs-title">
+      <div class="mcf-section-head">
+        <h2 id="mcf-pubs-title" class="mcf-h2">{{ $p.title | default "Recent publications" }}</h2>
+        {{- with $p.more_url }}<a class="mcf-more" href="{{ . | relURL }}">{{ $p.more_label | default "All publications" }}<span aria-hidden="true"> &rarr;</span></a>{{ end }}
+      </div>
+      <ol class="mcf-pub-list" role="list">
+        {{- range . }}
+          {{ partial "home/pub-item.html" (dict "page" . "max" ($p.max_authors | default 6)) }}
+        {{- end }}
+      </ol>
+    </section>
+    {{- end }}
+
+  </div>
+  {{- end }}
+
+  {{- /* ---------- Call to action ---------- */ -}}
+  {{- with $home.cta }}
+  <section class="mcf-section mcf-cta" aria-labelledby="mcf-cta-title">
+    <div class="mcf-cta-text">
+      <h2 id="mcf-cta-title" class="mcf-cta-title">{{ .title }}</h2>
+      {{- with .text }}<p>{{ . | markdownify }}</p>{{ end }}
+    </div>
+    {{ partial "home/buttons.html" .buttons }}
+  </section>
+  {{- end }}
+
+</div>
+
+{{- else -}}
+  {{- partial "home/page.html" . -}}
+{{- end -}}
