@@ -1,0 +1,27 @@
+{{- /*
+  Renders the grant metadata from the page front matter (see archetypes/grant.md):
+  funder, scheme, years, investigators (people IDs), amount (optional), partners (optional).
+
+  Usage (in a grant page):  {{< grant-details >}}
+*/ -}}
+{{- $p := .Page.Params -}}
+<dl class="mcf-grant not-prose">
+  {{- with $p.funder }}<dt>Funder</dt><dd>{{ . }}</dd>{{ end }}
+  {{- with $p.scheme }}<dt>Scheme</dt><dd>{{ . }}</dd>{{ end }}
+  {{- with $p.years }}<dt>Years</dt><dd>{{ . }}</dd>{{ end }}
+  {{- with $p.investigators }}
+  <dt>Investigators</dt>
+  <dd>
+    {{- range $i, $id := . -}}
+      {{- if $i }}, {{ end -}}
+      {{- with site.GetPage (printf "/people/%s" (urlize (lower $id))) -}}
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      {{- else -}}
+        {{ $id }}
+      {{- end -}}
+    {{- end -}}
+  </dd>
+  {{- end }}
+  {{- with $p.partners }}<dt>Partners</dt><dd>{{ delimit . ", " }}</dd>{{ end }}
+  {{- with $p.amount }}<dt>Amount</dt><dd>{{ . }}</dd>{{ end }}
+</dl>
