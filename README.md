@@ -81,6 +81,33 @@ orcid: 0000-0002-3026-5881        # ORCID if you have one
 
 In the content you can include the `{{< publist >}}` shortcode to have a publication list.
 
+### Roles and profile fields (MCF / ZA people directory)
+The People directory (`/mcf/people/`, also `/people/`) groups people by their **role**, which is the second entry of the site list:
+```yaml
+mcf:
+- people
+- phd
+```
+MCF roles, in display order: `lead` (group leaders / academics), `postdoc`, `phd`, `masters`, `honours`, `alumni-postdoc`, `alumni-phd`, `alumni`.
+Section titles and labels are set in `themes/mcf/data/people_roles.yaml` (there is also a block for the ZA site roles). Keep the `mcf` column of the role table in `auto/get.doi.R` consistent with these.
+
+Optional front matter shown on the cards and the profile page:
+```yaml
+position: Associate Professor     # display text; if empty the role label is shown
+email: someone@uq.edu.au
+scholar: https://scholar.google.com/citations?user=...   # Google Scholar URL
+uqprofile: https://researchers.uq.edu.au/researcher/...  # UQ researcher profile URL
+website: https://...
+linkedin: https://www.linkedin.com/in/...
+interests:                        # research interests (first two shown on the card)
+- Lattice Boltzmann methods
+- Multiphase flow
+weight: 1                         # optional, orders people within a role (default: by surname)
+```
+A photo is a page-bundle image in the person's folder: `thumbnail.jpg` (or the file named by `feature:`). It is cropped to a square automatically; without a photo, initials are shown.
+
+**Note:** the weekly auto-update bot (`auto/get.doi.R`) replaces all front matter of a file containing `auto_data: yes` and the whole body of a file containing `auto_content: yes`. Delete those two lines from any people file you edit by hand.
+
 ## `content/doi/`
 Content about publications. The names of the files should be named `content/doi/[DOI].md`.
 

@@ -1,0 +1,60 @@
+{{- /*
+  External links of a person (email, ORCID, Scopus, Google Scholar, UQ
+  profile, website, LinkedIn) from front matter. Empty values and the R NA
+  artefact ".na.character" written by the auto-update bot are ignored.
+  Params: page, compact (true: icon-only, first Scopus ID only).
+*/ -}}
+{{- $p := .page -}}
+{{- $compact := .compact | default false -}}
+{{- $na := slice "" ".na.character" "NA" "na" "<nil>" -}}
+{{- $links := slice -}}
+{{- with $p.Params.email -}}
+{{-   $e := string . -}}
+{{-   if not (in $na $e) -}}
+{{-     $links = $links | append (dict "icon" "email" "label" "Email" "title" $e "url" (printf "mailto:%s" $e)) -}}
+{{-   end -}}
+{{- end -}}
+{{- with $p.Params.orcid -}}
+{{-   $o := string . -}}
+{{-   if findRE `^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$` $o -}}
+{{-     $links = $links | append (dict "icon" "orcid" "label" "ORCID" "title" (printf "ORCID %s" $o) "url" (printf "https://orcid.org/%s" $o)) -}}
+{{-   end -}}
+{{- end -}}
+{{- with $p.Params.scopus -}}
+{{-   $ids := cond (reflect.IsSlice .) . (slice .) -}}
+{{-   $n := 0 -}}
+{{-   range $ids -}}
+{{-     $id := string . -}}
+{{-     if and (findRE `^\d+$` $id) (or (not $compact) (eq $n 0)) -}}
+{{-       $n = add $n 1 -}}
+{{-       $label := cond (and (not $compact) (gt $n 1)) (printf "Scopus (%d)" $n) "Scopus" -}}
+{{-       $links = $links | append (dict "icon" "scopus" "label" $label "title" (printf "Scopus author %s" $id) "url" (printf "https://www.scopus.com/authid/detail.uri?authorId=%s" $id)) -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{- range $d := slice
+      (dict "key" "scholar" "icon" "google-scholar" "label" "Google Scholar")
+      (dict "key" "uqprofile" "icon" "university" "label" "UQ profile")
+      (dict "key" "website" "icon" "globe" "label" "Website")
+      (dict "key" "linkedin" "icon" "linkedin" "label" "LinkedIn")
+-}}
+{{-   with index $p.Params $d.key -}}
+{{-     $u := string . -}}
+{{-     if hasPrefix $u "http" -}}
+{{-       $links = $links | append (dict "icon" $d.icon "label" $d.label "title" $d.label "url" $u) -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{- with $links -}}
+<ul class="mcf-links{{ if $compact }} mcf-links--compact{{ end }}">
+  {{- range . }}
+  <li>
+    <a href="{{ .url }}" {{ if hasPrefix .url "http" }}target="_blank" rel="noopener"{{ end }}
+      {{- if $compact }} aria-label="{{ .label }}: {{ $p.Title }}"{{ end }} title="{{ .title }}">
+      {{- partial "icon.html" .icon -}}
+      {{- if not $compact }}<span>{{ .label }}</span>{{ end -}}
+    </a>
+  </li>
+  {{- end }}
+</ul>
+{{- end -}}

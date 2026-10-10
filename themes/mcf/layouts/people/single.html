@@ -1,0 +1,40 @@
+{{/* Profile page of a person: content/people/<id>/index.md */}}
+{{ define "main" }}
+  {{- $r := partial "people/role.html" . -}}
+  {{- $position := .Params.position | default "" -}}
+  <article class="mcf-profile">
+    {{- with .Parent }}
+    <nav class="mcf-profile__crumbs print:hidden" aria-label="Breadcrumb">
+      <a href="{{ .RelPermalink }}"><span aria-hidden="true">&larr;</span> {{ .Title | default "People" }}</a>
+    </nav>
+    {{- end }}
+    <header class="mcf-profile__header">
+      <div class="mcf-profile__photo">
+        {{- partial "people/avatar.html" (dict "page" . "size" "lg") -}}
+      </div>
+      <div class="mcf-profile__meta">
+        <h1 class="mcf-profile__name">{{ .Title }}</h1>
+        {{- if or $position $r.label }}
+        <p class="mcf-profile__position">
+          {{- with $position }}<span>{{ . }}</span>{{ end -}}
+          {{- if and $r.label (ne $r.label $position) }}<span class="mcf-badge{{ if $r.alumni }} mcf-badge--muted{{ end }}">{{ $r.label }}</span>{{ end -}}
+        </p>
+        {{- end }}
+        {{- partial "people/links.html" (dict "page" . "compact" false) -}}
+        {{- with .Params.interests }}
+        <div class="mcf-profile__interests">
+          <h2 class="mcf-profile__label">Research interests</h2>
+          <ul class="mcf-chips">
+            {{- range (cond (reflect.IsSlice .) . (slice .)) }}
+            <li>{{ . }}</li>
+            {{- end }}
+          </ul>
+        </div>
+        {{- end }}
+      </div>
+    </header>
+    <div class="mcf-profile__content prose dark:prose-invert">
+      {{ .Content | emojify }}
+    </div>
+  </article>
+{{ end }}

@@ -1,0 +1,74 @@
+# Role model for the People directory (/<site>/people/ and /people/) and
+# profile pages. One block per site, keyed by `params.sitesme`.
+#
+# A person's role is the SECOND entry of their site list in front matter,
+# e.g. for the MCF site:
+#
+#   mcf:
+#   - people
+#   - phd
+#
+# groups:  sections of the directory, in display order; each lists the roles
+#          it contains (also used to order people inside a section).
+# labels:  singular label shown on cards / profile badges.
+# plurals: sub-heading used when a section contains more than one role.
+# other:   section title for members whose role is missing or not listed.
+#
+# Keep the MCF roles consistent with the `mcf` column of the role table in
+# auto/get.doi.R.
+
+mcf:
+  groups:
+    - title: Group Leaders
+      roles: [lead]
+    - title: Postdoctoral Researchers
+      roles: [postdoc]
+    - title: PhD Students
+      roles: [phd]
+    - title: Masters and Honours Students
+      roles: [masters, honours]
+    - title: Alumni
+      roles: [alumni-postdoc, alumni-phd, alumni]
+  labels:
+    lead: Group Leader
+    postdoc: Postdoctoral Researcher
+    phd: PhD Student
+    masters: Masters Student
+    honours: Honours Student
+    alumni-postdoc: Former Postdoctoral Researcher
+    alumni-phd: Former PhD Student
+    alumni: Alumni
+  plurals:
+    masters: Masters Students
+    honours: Honours Students
+    alumni-postdoc: Former Postdoctoral Researchers
+    alumni-phd: Former PhD Students
+    alumni: Other Alumni
+  other: Members
+
+za:
+  groups:
+    - title: Senior Academic Staff
+      roles: [profesor, hab]
+    - title: Assistant Professors
+      roles: [adjunkt]
+    - title: Assistants
+      roles: [asystent]
+    - title: PhD Students
+      roles: [phd]
+    - title: Alumni
+      roles: [alumni-phd, alumni]
+  labels:
+    profesor: Professor
+    hab: Dr hab.
+    adjunkt: Assistant Professor
+    asystent: Assistant
+    phd: PhD Student
+    alumni-phd: Former PhD Student
+    alumni: Alumni
+  plurals:
+    profesor: Professors
+    hab: Habilitated Doctors
+    alumni-phd: Former PhD Students
+    alumni: Other Alumni
+  other: Members

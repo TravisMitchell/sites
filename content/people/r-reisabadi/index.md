@@ -1,13 +1,17 @@
 ---
 short: R Reisabadi
 title: R Reisabadi
-auto_content: yes                                  # DELETE THIS TO NOT AUTO GENERATE CONTENT
-auto_data: yes                                     # DELETE THIS TO NOT AUTO GENERATE METADATA
 mcf:
 - people
-- post-postdoc
+- alumni-postdoc
 scopus: '36731631700'
 orcid: .na.character
+interests:
+- Coal seam gas geomechanics
+- Wellbore stability
+- Stress and permeability modelling
 ---
+
+<!-- TODO(MCF): full name, photo (thumbnail.jpg in this folder), short bio, email/links, current position; interests above were derived from publication titles/keywords - please confirm -->
 
 {{< publist >}}
