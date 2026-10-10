@@ -65,9 +65,10 @@ home:
     - 1740x515 Bottom
     - 1740x395 Top
     image_alt: Simulation visualisation of bubbles along a cylindrical conduit, with the surrounding flow coloured by strain magnitude.
-    caption: Simulation snapshot from our methane pyrolysis project.
-    caption_link: /posts/phd-project-pyrolysis/
-    caption_link_label: Read more
+    # TODO(MCF): confirm caption - image comes from the methane pyrolysis PhD advert.
+    caption: Simulation of gas bubbles rising along an annular pipe.
+    caption_link: /research/#multiphase-flows
+    caption_link_label: Multiphase research
 
   research:
     title: Research themes

@@ -399,38 +399,7 @@ html.dark .mcf-footer__bottom {
   font-size: 0.75rem;
 }
 
-/* --- Buttons (404 etc.) -------------------------------------------------- */
-.mcf-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.6rem 1.25rem;
-  border: 1px solid transparent;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.5;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
-}
-.mcf-btn--primary {
-  background: rgb(var(--color-primary-600));
-  color: rgb(var(--color-neutral));
-}
-.mcf-btn--primary:hover {
-  background: rgb(var(--color-primary-700));
-}
-html.dark .mcf-btn--primary {
-  background: rgb(var(--color-primary-500));
-  color: #fff;
-}
-html.dark .mcf-btn--primary:hover {
-  background: rgb(var(--color-primary-600));
-}
+/* --- Buttons: base .mcf-btn styles live in the home section; ghost variant for 404 -------------------------------------------------- */
 .mcf-btn--ghost {
   border-color: rgb(var(--color-neutral-300));
   color: rgb(var(--color-neutral-800));
@@ -682,7 +651,7 @@ html.dark .mcf-hero-summary { color: rgb(var(--color-neutral-300)); }
   .mcf-hero-body { max-width: 34rem; }
 }
 
-/* ---- Buttons ------------------------------------------------------------- */
+/* ---- Buttons (shared .mcf-btn component, also used by 404 and cta shortcode) ------------------------------------------------------------- */
 .mcf-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem; }
 .mcf-btn {
   display: inline-flex;
@@ -1723,18 +1692,18 @@ html.dark .pubs-source { color: rgb(var(--color-neutral-500)); }
  * ============================================================ */
 
 /* Selected publications ({{< pubs >}}) */
-.mcf-pubs {
+.mcf-selpubs {
   margin: 1.5rem 0 2.5rem;
   padding: 1rem 1.25rem;
   border-left: 3px solid rgb(var(--color-primary-500));
   border-radius: 0 0.375rem 0.375rem 0;
   background: rgb(var(--color-neutral-100));
 }
-html.dark .mcf-pubs {
+html.dark .mcf-selpubs {
   background: rgba(var(--color-neutral-700), 0.4);
   border-left-color: rgb(var(--color-primary-400));
 }
-.mcf-pubs__label {
+.mcf-selpubs__label {
   margin: 0 0 0.5rem;
   font-size: 0.75rem;
   font-weight: 700;
@@ -1742,36 +1711,36 @@ html.dark .mcf-pubs {
   text-transform: uppercase;
   color: rgb(var(--color-primary-700));
 }
-html.dark .mcf-pubs__label { color: rgb(var(--color-primary-300)); }
-.mcf-pubs__list {
+html.dark .mcf-selpubs__label { color: rgb(var(--color-primary-300)); }
+.mcf-selpubs__list {
   margin: 0;
   padding: 0;
   list-style: none;
   font-size: 0.9rem;
   line-height: 1.45;
 }
-.mcf-pubs__list > li { margin: 0; padding: 0.4rem 0; }
-.mcf-pubs__list > li + li { border-top: 1px solid rgb(var(--color-neutral-200)); }
-html.dark .mcf-pubs__list > li + li { border-top-color: rgb(var(--color-neutral-600)); }
-.mcf-pubs a,
+.mcf-selpubs__list > li { margin: 0; padding: 0.4rem 0; }
+.mcf-selpubs__list > li + li { border-top: 1px solid rgb(var(--color-neutral-200)); }
+html.dark .mcf-selpubs__list > li + li { border-top-color: rgb(var(--color-neutral-600)); }
+.mcf-selpubs a,
 .mcf-opps a,
 .mcf-card a,
-.mcf-cta__body a,
+.mcf-callout__body a,
 .mcf-grant a {
   color: rgb(var(--color-primary-700));
   text-decoration: underline;
   text-decoration-color: rgb(var(--color-primary-300));
   text-underline-offset: 2px;
 }
-.mcf-pubs a:hover,
+.mcf-selpubs a:hover,
 .mcf-opps a:hover,
 .mcf-card a:hover,
-.mcf-cta__body a:hover,
+.mcf-callout__body a:hover,
 .mcf-grant a:hover { text-decoration-color: currentColor; }
-html.dark .mcf-pubs a,
+html.dark .mcf-selpubs a,
 html.dark .mcf-opps a,
 html.dark .mcf-card a,
-html.dark .mcf-cta__body a,
+html.dark .mcf-callout__body a,
 html.dark .mcf-grant a {
   color: rgb(var(--color-primary-300));
   text-decoration-color: rgb(var(--color-primary-600));
@@ -1848,46 +1817,27 @@ html.dark .mcf-card__icon { color: rgb(var(--color-primary-400)); }
 .mcf-card__body p:last-child { margin-bottom: 0; }
 
 /* Call to action ({{< cta >}}) */
-.mcf-cta {
+.mcf-callout {
   margin: 1.5rem 0 2rem;
   padding: 1.5rem;
   border-radius: 0.75rem;
   background: rgb(var(--color-primary-50));
   border: 1px solid rgb(var(--color-primary-200));
 }
-html.dark .mcf-cta {
+html.dark .mcf-callout {
   background: rgba(var(--color-primary-900), 0.35);
   border-color: rgb(var(--color-primary-800));
 }
-.mcf-cta__title {
+.mcf-callout__title {
   margin: 0 0 0.5rem;
   font-size: 1.25rem;
   font-weight: 800;
   color: rgb(var(--color-primary-800));
 }
-html.dark .mcf-cta__title { color: rgb(var(--color-primary-200)); }
-.mcf-cta__body { font-size: 1rem; line-height: 1.6; }
-.mcf-cta__body p { margin: 0 0 0.5rem; }
-.mcf-cta__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
-.mcf-btn {
-  display: inline-block;
-  padding: 0.5rem 1.1rem;
-  border-radius: 0.375rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.4;
-  text-decoration: none;
-  border: 1px solid rgb(var(--color-primary-600));
-  transition: background-color 0.15s, color 0.15s;
-}
-.mcf-btn--primary { background: rgb(var(--color-primary-600)); color: rgb(var(--color-neutral)); }
-.mcf-btn--primary:hover { background: rgb(var(--color-primary-700)); border-color: rgb(var(--color-primary-700)); }
-.mcf-btn--secondary { background: transparent; color: rgb(var(--color-primary-700)); }
-.mcf-btn--secondary:hover { background: rgb(var(--color-primary-100)); }
-html.dark .mcf-btn--primary { background: rgb(var(--color-primary-500)); border-color: rgb(var(--color-primary-500)); color: rgb(var(--color-neutral-900)); }
-html.dark .mcf-btn--primary:hover { background: rgb(var(--color-primary-400)); border-color: rgb(var(--color-primary-400)); }
-html.dark .mcf-btn--secondary { color: rgb(var(--color-primary-300)); border-color: rgb(var(--color-primary-400)); }
-html.dark .mcf-btn--secondary:hover { background: rgba(var(--color-primary-900), 0.5); }
+html.dark .mcf-callout__title { color: rgb(var(--color-primary-200)); }
+.mcf-callout__body { font-size: 1rem; line-height: 1.6; }
+.mcf-callout__body p { margin: 0 0 0.5rem; }
+.mcf-callout__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
 
 /* Grant metadata ({{< grant-details >}}) */
 .mcf-grant {

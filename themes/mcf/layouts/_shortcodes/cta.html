@@ -8,13 +8,13 @@
 
   Optional second button: button2="..." href2="...".
 */ -}}
-<aside class="mcf-cta not-prose">
+<aside class="mcf-callout not-prose">
   {{- with .Get "title" }}
-  <p class="mcf-cta__title">{{ . }}</p>
+  <p class="mcf-callout__title">{{ . }}</p>
   {{- end }}
-  <div class="mcf-cta__body">{{ .Inner | markdownify }}</div>
+  <div class="mcf-callout__body">{{ .Inner | markdownify }}</div>
   {{- if or (.Get "button") (.Get "button2") }}
-  <div class="mcf-cta__actions">
+  <div class="mcf-callout__actions">
     {{- with .Get "button" }}
     <a class="mcf-btn mcf-btn--primary" href="{{ $.Get "href" | default "/contact/" }}">{{ . }}</a>
     {{- end }}

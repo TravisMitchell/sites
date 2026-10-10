@@ -29,9 +29,9 @@
   {{- end -}}
 {{- end -}}
 {{- with $items }}
-<div class="mcf-pubs not-prose">
-  <p class="mcf-pubs__label">Selected publications</p>
-  <ul class="mcf-pubs__list">
+<div class="mcf-selpubs not-prose">
+  <p class="mcf-selpubs__label">Selected publications</p>
+  <ul class="mcf-selpubs__list">
     {{- range . }}
     <li>{{ partial "doi.html" (dict "page" $page "site" $site "article" .) }}</li>
     {{- end }}

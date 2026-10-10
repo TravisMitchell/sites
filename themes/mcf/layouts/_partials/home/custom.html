@@ -184,7 +184,7 @@
           <img class="mcf-news-thumb" src="{{ $t.RelPermalink }}" width="120" height="90" alt="" loading="lazy" decoding="async">
           {{- end }}
           <div class="mcf-news-body">
-            <time class="mcf-meta" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
+            <time class="mcf-meta" datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "functions/date.html" .Date }}</time>
             <h3 class="mcf-news-title"><a class="mcf-stretched" href="{{ $href }}"{{ if $ext }} rel="external"{{ end }}>{{ .Title }}</a></h3>
             {{- $sum := .Params.summary | default .Params.description | default (.Summary | plainify) | default .Plain }}
             {{- with $sum }}<p class="mcf-news-summary">{{ . | truncate 220 }}</p>{{ end }}
