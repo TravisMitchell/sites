@@ -1,0 +1,30 @@
+{{- /*
+  Body of a taxonomy term page listing publications as citations
+  (mcf/publications, za/publications, authors/<id>, keywords/<kw>).
+  Context: the term page.
+*/ -}}
+{{- $highlight := "" -}}
+{{- $person := false -}}
+{{- $title := .Title -}}
+{{- if eq .Data.Plural "authors" -}}
+{{-   $highlight = .Title -}}
+{{-   $person = site.GetPage (printf "/people/%s" (.Title | urlize)) -}}
+{{-   $name := .Title -}}
+{{-   with $person -}}{{- $name = .Title -}}{{- end -}}
+{{-   $title = printf "Publications by %s" $name -}}
+{{- end -}}
+<header>
+  {{- if .Params.showBreadcrumbs | default (.Site.Params.list.showBreadcrumbs | default false) }}
+  {{ partial "breadcrumbs.html" . }}
+  {{- end }}
+  <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">{{ $title }}</h1>
+  {{- with $person }}
+  <p class="pubs-profile"><a href="{{ .RelPermalink }}">&larr; Profile of {{ .Title }}</a></p>
+  {{- end }}
+</header>
+{{- with .Content }}
+<section class="prose mt-6 max-w-prose dark:prose-invert">
+  {{ . | emojify }}
+</section>
+{{- end }}
+{{ partial "publications/list.html" (dict "pages" .Pages "highlight" $highlight) }}

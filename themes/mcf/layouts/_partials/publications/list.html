@@ -1,0 +1,72 @@
+{{- /*
+  Full publication list: summary line, search/type filter (enhanced by
+  js/publications.js), year jump-nav and publications grouped by year.
+  Input (dict):
+    pages     - page collection of publications (required)
+    highlight - author ID to emphasise (optional)
+    abstract  - show collapsible abstracts (default true)
+*/ -}}
+{{- $pages := .pages -}}
+{{- $highlight := .highlight | default "" -}}
+{{- $abstract := .abstract | default true -}}
+{{- $total := len $pages -}}
+{{- $cites := 0 -}}
+{{- $types := slice -}}
+{{- range $pages -}}
+{{-   $cites = add $cites (int (.Params.scopus_cite | default 0)) -}}
+{{-   with .Params.pub_type -}}{{- $types = $types | append . -}}{{- end -}}
+{{- end -}}
+{{- $types = $types | uniq | sort -}}
+{{- $groups := $pages.ByDate.Reverse.GroupByDate "2006" -}}
+{{- if $pages }}
+<div class="pubs" data-pubs>
+  <p class="pubs-summary">
+    <strong>{{ lang.FormatNumber 0 $total }}</strong> publication{{ if ne $total 1 }}s{{ end }}
+    {{- if gt $cites 0 }}<span class="pub-sep" aria-hidden="true"> · </span><strong>{{ lang.FormatNumber 0 $cites }}</strong> citations <span class="pubs-source">(Scopus)</span>{{ end }}
+  </p>
+  {{- if gt $total 5 }}
+  <form class="pubs-controls" role="search" hidden onsubmit="return false">
+    <label class="pubs-field pubs-field-q">
+      <span class="pubs-label">Search</span>
+      <input class="pubs-q" type="search" name="q" placeholder="Title, author or journal" autocomplete="off">
+    </label>
+    {{- if gt (len $types) 1 }}
+    <label class="pubs-field">
+      <span class="pubs-label">Type</span>
+      <select class="pubs-type" name="type">
+        <option value="">All types</option>
+        {{- range $types }}
+        <option value="{{ . }}">{{ . }} ({{ len (where $pages "Params.pub_type" .) }})</option>
+        {{- end }}
+      </select>
+    </label>
+    {{- end }}
+    <p class="pubs-status" aria-live="polite"></p>
+  </form>
+  {{- end }}
+  {{- if gt (len $groups) 1 }}
+  <nav class="pubs-years" aria-label="Jump to year">
+    {{- range $groups }}
+    <a href="#year-{{ .Key }}" data-year="{{ .Key }}">{{ .Key }}</a>
+    {{- end }}
+  </nav>
+  {{- end }}
+  {{- range $groups }}
+  <section class="pubs-year" id="year-{{ .Key }}" data-year="{{ .Key }}">
+    <h2 class="pubs-year-heading">{{ .Key }} <span class="pubs-year-count" title="{{ len .Pages }} publication{{ if ne (len .Pages) 1 }}s{{ end }}">{{ len .Pages }}</span></h2>
+    <ul class="pub-list">
+      {{- range .Pages }}
+      {{ partial "pub/item.html" (dict "article" . "highlight" $highlight "abstract" $abstract) }}
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+  <p class="pubs-empty" hidden>No publications match your search.</p>
+</div>
+{{- with resources.Get "js/publications.js" }}
+{{- $js := . | resources.Minify | resources.Fingerprint "sha512" }}
+<script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+{{- end }}
+{{- else }}
+<p class="pubs-empty"><em>{{ i18n "list.no_articles" | default "No publications yet." }}</em></p>
+{{- end }}

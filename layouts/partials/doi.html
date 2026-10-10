@@ -1,29 +1,22 @@
-{{- $page := .page -}}
-{{- $site := .site -}}
-{{- $article := .article -}}
-{{- $url := "" -}}
-{{- $link := "" -}}
-{{- $linktext := "LINK" -}}
-{{- with $article.Params.redirect -}}
-{{-   $link = . -}}
-{{- else -}}
-{{    $url = $article.RelPermalink }}
+{{- /*
+  Inline citation of a publication:
+    Authors. Title. Journal, Year. DOI
+  Input (dict): page (current page; its .Params.short is emphasised), site, article.
+  Optional: highlight (author ID to emphasise instead of page.Params.short).
+*/ -}}
+{{- $highlight := .highlight | default "" -}}
+{{- if not $highlight -}}
+{{-   with .page -}}{{- with .Params.short -}}{{- $highlight = . -}}{{- end -}}{{- end -}}
 {{- end -}}
-{{- with $article.Params.doi -}}
-{{-   $doiurl := ( printf "https://doi.org/%s" . ) -}}
-{{-   if eq $link "" -}}
-{{-     $link = $doiurl -}}
-{{-   end -}}
-{{-   if eq $doiurl $link -}}
-{{-     $linktext = "DOI" -}}
-{{-   end -}}
-{{- end -}}
-{{- range $author := .article.Params.realauthors -}}
-{{- range $key, $value := $author -}}
-{{ partial "pub_author.html" (dict "id" $key "name" $value "page" $page "site" $site )}},
-{{ end -}}
-{{- end -}}
-{{ if $url }}<a href="{{ $url }}" aria-label="{{ $article.Title | emojify }}" >{{ end }}
-<i>{{- $article.Title -}}</i>
-{{ if $url }}</a>{{ end }}, {{ $article.Params.journal }}, {{ $article.Params.Date.Year }},
-{{- with $article.Params.doi -}}<small> <a href="https://doi.org/{{ . }}">[{{ $linktext }}]</a></small>{{- end -}}
+{{- $c := partialCached "pub/parts.html" (dict "article" .article "highlight" $highlight) .article.Path $highlight -}}
+<span class="pub-cite">
+{{- with $c.authors -}}<span class="pub-authors">{{ . }}</span>. {{ end -}}
+<a class="pub-title" href="{{ $c.href }}">{{ $c.title }}</a>
+{{- if not (findRE `[.?!]$` $c.title) }}.{{ end -}}
+{{- with $c.journal }} <i class="pub-journal">{{ . }}</i>{{ end -}}
+{{- if and $c.journal $c.year }},{{ end -}}
+{{- with $c.year }} <span class="pub-year">{{ . }}</span>{{ end -}}
+{{- if or $c.journal $c.year }}.{{ end -}}
+{{- with $c.doiurl }} <small><a class="pub-doi" href="{{ . }}" title="doi:{{ $c.doi }}">DOI</a></small>{{ end -}}
+</span>
+{{- /**/ -}}

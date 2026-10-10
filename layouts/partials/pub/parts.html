@@ -1,0 +1,73 @@
+{{- /*
+  Shared citation data for one publication (content/doi/*.md).
+  Input (dict):
+    article   - the publication page (required)
+    highlight - author ID to emphasise in the author list (optional)
+  Returns a dict:
+    authors  - HTML author list ("A, B and C"), linked/emphasised via pub_author.html
+    names    - plain-text author names and IDs (for searching)
+    title    - title (plain string)
+    href     - where the title links: the DOI/redirect target, else the local page
+    journal  - journal / proceedings name, trailing punctuation removed ("" if none)
+    year     - publication year ("" if no date)
+    doi      - DOI ("" if none)
+    doiurl   - https://doi.org/<doi> ("" if none)
+    type     - pub_type ("" if none)
+    cites    - Scopus citation count (int)
+  Safe to call with partialCached keyed by article path + highlight.
+*/ -}}
+{{- $a := .article -}}
+{{- $highlight := .highlight | default "" -}}
+{{- $p := $a.Params -}}
+
+{{- /* Authors, in publication order */ -}}
+{{- $list := slice -}}
+{{- with $p.realauthors -}}
+{{-   if reflect.IsMap . -}}
+{{-     $map := . -}}
+{{-     range $p.authors -}}
+{{-       $list = $list | append (dict "id" . "name" ((index $map .) | default .)) -}}
+{{-     end -}}
+{{-   else -}}
+{{-     range . -}}
+{{-       range $k, $v := . -}}
+{{-         $list = $list | append (dict "id" $k "name" $v) -}}
+{{-       end -}}
+{{-     end -}}
+{{-   end -}}
+{{- else -}}
+{{-   range $p.authors -}}
+{{-     $list = $list | append (dict "id" . "name" .) -}}
+{{-   end -}}
+{{- end -}}
+{{- $html := slice -}}
+{{- $names := slice -}}
+{{- range $list -}}
+{{-   $html = $html | append (string (partial "pub_author.html" (dict "id" .id "name" .name "highlight" $highlight))) -}}
+{{-   $names = $names | append .name .id -}}
+{{- end -}}
+{{- $authors := "" -}}
+{{- if $html -}}
+{{-   $authors = delimit $html ", " " and " -}}
+{{- end -}}
+
+{{- $doi := string ($p.doi | default "") -}}
+{{- $doiurl := "" -}}
+{{- with $doi -}}{{- $doiurl = printf "https://doi.org/%s" . -}}{{- end -}}
+{{- $href := $p.redirect | default $a.RelPermalink -}}
+{{- $journal := strings.TrimRight " ,;:" (string ($p.journal | default "")) -}}
+{{- $year := "" -}}
+{{- if not $a.Date.IsZero -}}{{- $year = string $a.Date.Year -}}{{- end -}}
+
+{{- return dict
+  "authors" ($authors | safeHTML)
+  "names" (delimit $names " ")
+  "title" ($a.Title | default $doi)
+  "href" $href
+  "journal" $journal
+  "year" $year
+  "doi" $doi
+  "doiurl" $doiurl
+  "type" (string ($p.pub_type | default ""))
+  "cites" (int ($p.scopus_cite | default 0))
+-}}
