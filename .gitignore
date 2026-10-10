@@ -6,3 +6,4 @@ public/
 .Rproj.user
 .hugo_build.lock
 cache/*.Rdata
+resources/

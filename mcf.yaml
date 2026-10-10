@@ -1,3 +1,4 @@
+baseURL: 'https://mcf.tclb.io/'
 theme:
   - mcf
   - congo
@@ -11,26 +12,28 @@ outputs:
     - RSS
     - JSON
 
-title: "Modelling Complex Fluids group"
-description: 'Modelling Complex Fluids group at the University of Queensland'
-copyright: '&copy; 2023 MCF'
+title: "Modelling Complex Fluids Group"
+description: 'The Modelling Complex Fluids (MCF) group at The University of Queensland develops advanced computational methods for multiphase, non-Newtonian and particle-laden flows in the energy and resources sector.'
 dateFormat: 2 January 2006
 menus:
   main:
-    - name: News
-      pageRef: mcf/news
-      weight: 20
+    - name: Research
+      pageRef: research
+      weight: 10
     - name: People
       pageRef: mcf/people
-      weight: 30
+      weight: 20
     - name: Publications
       pageRef: mcf/publications
+      weight: 30
+    - name: News
+      pageRef: mcf/news
       weight: 40
-    - name: Grants
-      pageRef: mcf/grants
+    - name: Join Us
+      pageRef: join
       weight: 50
-    - name: Jobs
-      pageRef: mcf/jobs
+    - name: Contact
+      pageRef: contact
       weight: 60
 markup:
   goldmark:
@@ -43,10 +46,12 @@ markup:
     endLevel: 3
 
 params:
+  author:
+    name: 'Modelling Complex Fluids Group, The University of Queensland'
   recentProp: "Params.mcf"
   recentValue:
     - news
-  colorScheme: congo
+  colorScheme: mcf
   defaultAppearance: light
   autoSwitchAppearance: true
   enableSearch: true
@@ -56,7 +61,7 @@ params:
     showTitle: true
   footer:
     showCopyright: true
-    showThemeAttribution: true
+    showThemeAttribution: false
     showAppearanceSwitcher: true
     showScrollToTop: true
   homepage:
@@ -66,7 +71,7 @@ params:
   article:
     showDate: true
     showDateUpdated: false
-    showAuthor: true
+    showAuthor: false
     showBreadcrumbs: true
     showDraftLabel: true
     showEdit: false
@@ -84,7 +89,7 @@ params:
     showBreadcrumbs: true
     showSummary: false
     showTableOfContents: true
-    showTaxonomies: true
+    showTaxonomies: false
     groupByYear: false
     paginationWidth: 1
   sitemap:
