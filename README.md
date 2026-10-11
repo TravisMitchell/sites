@@ -142,7 +142,31 @@ Main place for general posts.
 Place for TCLB website specific content.
 
 ## `themes/mcf/content/`
-Place for MCF website specific content.
+Place for MCF website specific content. Note that the `za` site also uses the `mcf` theme, so MCF-only templates check `site.Params.sitesme`.
+
+### Editing the MCF website
+- **Homepage**: all homepage text (hero, research-theme cards, stats, image, call to action) lives in the `home:` block of `themes/mcf/content/_index.md`. The statistics (publications, current members, citations) are computed by Hugo. Sections with no data are hidden.
+- **Research, Contact, Join Us**: `themes/mcf/content/{research,contact,join}/index.md`. The research-theme heading IDs (e.g. `{#multiphase-flows}`) are linked from the homepage cards, so keep them stable.
+- **Shortcodes** (`themes/mcf/layouts/_shortcodes/`):
+  - `{{< pubs "10.xxxx/a" "10.yyyy/b" >}}`: a "Selected publications" box rendered from `content/doi/` pages. Hugo prints a warning if a DOI page doesn't exist.
+  - `{{< opportunities >}}fallback text{{< /opportunities >}}`: lists pages tagged `mcf: jobs`, newest first. A post with an `expiryDate` disappears automatically after that date.
+  - `{{< cards >}}{{< card title="..." icon="..." >}}...{{< /card >}}{{< /cards >}}`: a responsive card grid.
+  - `{{< cta title="..." button="..." href="..." button2="..." href2="..." >}}text{{< /cta >}}`: a call-to-action box.
+- **News, jobs and grants** have archetypes in `themes/mcf/archetypes/`:
+  ```bash
+  hugo new --config mcf.yaml --kind news  content/posts/<slug>/index.md
+  hugo new --config mcf.yaml --kind job   content/posts/<slug>/index.md
+  hugo new --config mcf.yaml --kind grant content/grants/<slug>.md
+  ```
+  Remove `draft: true` when the page is ready.
+- **Grants**: the Grants page (`/mcf/grants/`) is not in the menu while it is empty. After adding the first grant, re-enable it in `mcf.yaml` under `menus.main`:
+  ```yaml
+      - name: Grants
+        pageRef: mcf/grants
+        weight: 35
+  ```
+- **Styling**: Congo ships pre-compiled Tailwind, so utility classes that Congo itself doesn't use are not available. Extra styles go in `themes/mcf/assets/css/custom.css`, which is split into sections (branding, home, people, publications, content). The colour palette (UQ purple) is in `themes/mcf/assets/css/schemes/mcf.css`. Logo and favicons are in `themes/mcf/static/brand/`, and the inline logo is in `themes/mcf/layouts/_partials/brand/mark.html`.
+- **Static preview**: `mcf.yaml` sets `baseURL: https://mcf.tclb.io/`. `hugo server` overrides this automatically. For a static build that you open locally, pass `--baseURL http://localhost:<port>/`.
 
 ## `static/`
 All static files (like images, data, etc) should be placed here.

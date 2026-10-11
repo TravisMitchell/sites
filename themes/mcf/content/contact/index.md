@@ -25,7 +25,7 @@ School of Mechanical and Mining Engineering<br>
 The University of Queensland<br>
 St Lucia QLD 4072<br>
 Australia
-<!-- TODO(MCF): add building and room number (and a campus map link) if you want visitors to find you. -->
+{{< todo >}}TODO(MCF): add building and room number (and a campus map link) if you want visitors to find you.{{< /todo >}}
 {{< /card >}}
 {{< /cards >}}
 
@@ -33,10 +33,10 @@ Australia
 
 The group was founded in 2016 and is led by:
 
-- **[A/Prof Christopher Leonardi](/people/c-leonardi/)**, School of Mechanical and Mining Engineering. <!-- TODO(MCF): add Chris's email address and role, if they should be public. -->
-- **[Dr Travis Mitchell](/people/t-mitchell/)**, Lecturer, School of Mechanical and Mining Engineering. Email: [t.mitchell@uq.edu.au](mailto:t.mitchell@uq.edu.au) <!-- TODO(MCF): confirm current academic title (taken from the profile bio). -->
+- **[A/Prof Christopher Leonardi](/people/c-leonardi/)**, School of Mechanical and Mining Engineering. {{< todo >}}TODO(MCF): add Chris's email address and role, if they should be public.{{< /todo >}}
+- **[Dr Travis Mitchell](/people/t-mitchell/)**, Lecturer, School of Mechanical and Mining Engineering. Email: [t.mitchell@uq.edu.au](mailto:t.mitchell@uq.edu.au) {{< todo >}}TODO(MCF): confirm current academic title (taken from the profile bio).{{< /todo >}}
 
-<!-- TODO(MCF): add a phone number if you want one listed. -->
+{{< todo >}}TODO(MCF): add a phone number if you want one listed.{{< /todo >}}
 
 ## How to reach us
 

@@ -17,7 +17,7 @@ We develop and apply high-fidelity computational methods to understand complex f
 Much of our work is built on the **lattice Boltzmann method** (LBM), which we extend with phase-field models for interfaces, non-Newtonian rheology, thermal coupling and fully resolved particles via the discrete element method (DEM). Models are verified against analytical solutions and validated against experiments, then used to answer engineering questions and to build simpler closure relations and surrogate models that can be used at larger scales. The themes below are described in terms of what our [published work](/mcf/publications/) actually covers; each lists a few representative papers.
 
 {{< figure src="bubbles-annular-pipe.png" alt="Rendering of gas bubbles rising along the outside of a tube inside a larger pipe, with the surrounding liquid coloured by strain rate" caption="Simulation of gas bubbles rising along an annular pipe; colours show strain-rate and velocity magnitude." >}}
-<!-- TODO(MCF): confirm or improve this caption (image taken from the methane pyrolysis PhD advert, content/posts/phd-project-pyrolysis/). -->
+{{< todo >}}TODO(MCF): confirm or improve this caption (image taken from the methane pyrolysis PhD advert, content/posts/phd-project-pyrolysis/).{{< /todo >}}
 
 ## Multiphase and interfacial flows {#multiphase-flows}
 

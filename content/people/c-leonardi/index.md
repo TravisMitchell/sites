@@ -18,7 +18,7 @@ interests:
 - Mine ventilation
 ---
 
-<!-- TODO(MCF): Chris to review/expand bio (and add email/uqprofile/scholar links if wanted) -->
+{{< todo >}}TODO(MCF): Chris to review/expand bio (and add email/uqprofile/scholar links if wanted){{< /todo >}}
 
 Associate Professor Christopher Leonardi co-founded the Modelling Complex Fluids (MCF) group at The University of Queensland in 2016 with [Dr Travis Mitchell](/people/t-mitchell/).
 

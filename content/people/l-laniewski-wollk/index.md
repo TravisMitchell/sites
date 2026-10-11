@@ -17,7 +17,7 @@ interests:
 - Particle suspensions
 ---
 
-<!-- TODO(MCF): confirm Łukasz's MCF role. The auto/get.doi.R table lists him as "postdoc"; he is also listed as "adjunkt" on the ZA (Warsaw) site. Change to alumni-postdoc / lead / etc. if appropriate (and add `position:`). -->
+{{< todo >}}TODO(MCF): confirm Łukasz's MCF role. The auto/get.doi.R table lists him as "postdoc"; he is also listed as "adjunkt" on the ZA (Warsaw) site. Change to alumni-postdoc / lead / etc. if appropriate (and add `position:`).{{< /todo >}}
 
 I'm Łukasz
 

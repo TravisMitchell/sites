@@ -14,6 +14,6 @@ interests:
 - Phase-field methods
 ---
 
-<!-- TODO(MCF): full name, photo (thumbnail.jpg in this folder), short bio, email/links; interests above were derived from publication titles/keywords - please confirm -->
+{{< todo >}}TODO(MCF): full name, photo (thumbnail.jpg in this folder), short bio, email/links; interests above were derived from publication titles/keywords - please confirm{{< /todo >}}
 
 {{< publist >}}

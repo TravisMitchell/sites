@@ -37,7 +37,7 @@ PhD candidates in the group undertake an independent research project, typically
 - **Honours and masters students** at UQ interested in a computational thesis project are welcome to contact us to discuss topics related to our research themes.
 - **Visiting students and researchers** who would like to spend time with the group, for example during a PhD or on sabbatical, should email us with their proposed dates, research topic and source of funding.
 
-<!-- TODO(MCF): add details of any specific honours/masters project lists or visitor arrangements if these exist. -->
+{{< todo >}}TODO(MCF): add details of any specific honours/masters project lists or visitor arrangements if these exist.{{< /todo >}}
 
 ## What to include in your enquiry
 

@@ -12,6 +12,6 @@ interests:
 - Stress and permeability modelling
 ---
 
-<!-- TODO(MCF): full name, photo (thumbnail.jpg in this folder), short bio, email/links, current position; interests above were derived from publication titles/keywords - please confirm -->
+{{< todo >}}TODO(MCF): full name, photo (thumbnail.jpg in this folder), short bio, email/links, current position; interests above were derived from publication titles/keywords - please confirm{{< /todo >}}
 
 {{< publist >}}
