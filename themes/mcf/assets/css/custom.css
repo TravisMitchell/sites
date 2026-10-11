@@ -57,7 +57,7 @@ html.dark .mcf-mark__lower {
 .mcf-header {
   position: relative;
   z-index: 40;
-  padding: 1.25rem 0;
+  padding: 1.5rem 0; /* Congo's header uses py-6 on mobile */
   font-weight: 600;
   color: rgb(var(--color-neutral-900));
 }
