@@ -46,6 +46,8 @@ markup:
 
 params:
   dateFormat: 2 January 2006
+  images:
+    - img/mcf-social-card.png
   author:
     name: 'Modelling Complex Fluids Group, The University of Queensland'
   recentProp: "Params.mcf"
